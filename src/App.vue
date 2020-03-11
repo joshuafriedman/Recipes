@@ -1,22 +1,41 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div v-if="is_path">
+      <Recipe />
+      {{ path }}
+    </div>
+    <div v-else>
+      <RecipeSearch />
+      No Path
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Recipe from "./components/Recipe.vue";
+import RecipeSearch from "./components/RecipeSearch.vue";
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Recipe,
+    RecipeSearch
   },
-  mounted(){
+  data: function(){
+    return{
+      is_path: false,
+      path
+    }
+  },
+  beforeMount(){
     var electron = require('electron');
 var currentWindow = electron.remote.getCurrentWindow();
- 
 window.console.log(currentWindow.custom);
+var path = currentWindow.custom;
+    // check if file is opened
+  if(path){
+    this.is_path = true;
+    this.path = path;
+  }
   }
 }
 </script>
