@@ -2,7 +2,6 @@
   <div id="app">
     <div v-if="is_path">
       <Recipe :path="path" />
-      {{ path }}
     </div>
     <div v-else>
       <RecipeSearch />
@@ -31,6 +30,8 @@ export default {
 var currentWindow = electron.remote.getCurrentWindow();
 window.console.log(currentWindow.custom);
 var path = currentWindow.custom;
+window.console.log(electron.remote.process);
+ path = "/Users/Joshua/Desktop/Chcolate chip cookies copy.JSHN.JSON"// DELETE BEFORE BUILD!!
     // check if file is opened
   if(path!=""){
     this.is_path = true;
