@@ -6,7 +6,7 @@ import {
   /* installVueDevtools */
 } from 'vue-cli-plugin-electron-builder/lib'
 const isDevelopment = process.env.NODE_ENV !== 'production'
-
+var ready = false
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 var custom = ""
@@ -15,12 +15,13 @@ let win
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([{scheme: 'app', privileges: { secure: true, standard: true } }])
 
-// function createWindow () {
-  // Create the browser window.
-  // win = new BrowserWindow({ width: 800, height: 600, webPreferences: {
-  //   nodeIntegration: true
-  // } })
+
   function createWindow () {
+      // Create the browser window.
+    win = new BrowserWindow({ width: 800, height: 600, webPreferences: {
+      nodeIntegration: true
+    } })
+    win.custom = ""+custom // JOSH EDIT
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
@@ -30,7 +31,7 @@ protocol.registerSchemesAsPrivileged([{scheme: 'app', privileges: { secure: true
     // Load the index.html when not in development
     win.loadURL('app://./index.html')
   }
-
+  custom=""
   win.on('closed', () => {
     win = null
   })
@@ -50,6 +51,7 @@ app.on('activate', () => {
   // dock icon is clicked and there are no other windows open.
   if (win === null) {
     createWindow()
+    // custom=""
   }
 })
 
@@ -71,16 +73,18 @@ app.on('ready', async () => {
     // }
 
   }
-  win = new BrowserWindow({ width: 800, height: 600, webPreferences: {
-    nodeIntegration: true
-  } })
-  win.custom = custom
+
   createWindow()
+  // custom=""
+  ready = true
 })
 
 //JOSH EDIT
 app.on('open-file', (event,path) => {
   custom =path 
+  if(ready){
+    createWindow()
+  }
   event.preventDefault()
 })
 

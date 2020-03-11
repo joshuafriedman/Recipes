@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div v-if="is_path">
-      <Recipe />
+      <Recipe :path="path" />
       {{ path }}
     </div>
     <div v-else>
@@ -23,7 +23,7 @@ export default {
   data: function(){
     return{
       is_path: false,
-      path
+      path: ""
     }
   },
   beforeMount(){
@@ -32,7 +32,7 @@ var currentWindow = electron.remote.getCurrentWindow();
 window.console.log(currentWindow.custom);
 var path = currentWindow.custom;
     // check if file is opened
-  if(path){
+  if(path!=""){
     this.is_path = true;
     this.path = path;
   }
