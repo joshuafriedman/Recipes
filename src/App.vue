@@ -31,7 +31,7 @@ var currentWindow = electron.remote.getCurrentWindow();
 window.console.log(currentWindow.custom);
 var path = currentWindow.custom;
 window.console.log(electron.remote.process);
- path = "/Users/Joshua/Desktop/Chcolate chip cookies copy.JSHN.JSON"// DELETE BEFORE BUILD!!
+//  path = "/Users/Joshua/Desktop/Chcolate chip cookies copy.JSHN.JSON"// DELETE BEFORE BUILD!!
     // check if file is opened
   if(path!=""){
     this.is_path = true;
