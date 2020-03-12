@@ -49,7 +49,7 @@
         <div class="ingredient">
           <div class="ingredient-text">Total Weight -10%</div>
         </div>
-        <div class="quantity">{{ sub_total_weight }}</div>
+        <div class="quantity">{{ ingQuant(1,sub_total_weight) }}</div>
         <div class="quantity">{{ ingQuant(quantity, sub_total_weight) }}</div>
       </div>
     </div>
@@ -183,8 +183,8 @@ export default {
   color: red;
 }
 .quantity {
-  margin-left: 100px;
-  width: 60px;
+  margin-left: 40px;
+  width: 120px;
 }
 #instructions-container {
   margin-top: 70px;
