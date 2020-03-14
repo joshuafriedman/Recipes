@@ -70,6 +70,7 @@ export default {
     },
     updateFile: function(event){
       this.path = event.target.files[0].path;
+      window.console.log(event.target.files);
       this.var_text = "Submit"
     },
     submit: function(){
@@ -88,6 +89,7 @@ export default {
         window.console.log('well hello');
         window.console.log(this.path);
         window.console.log(obj);
+        
 
     },
     removeIngredient: function(event){
