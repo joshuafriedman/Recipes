@@ -13,7 +13,7 @@
     <div id="ingredients">
               <div class="ingredient-container seperate nohover">
         <div class="ingredient">
-          <div class="ingredient-text">Name</div>
+          <div class="ingredient-text">Ingredient Name</div>
         </div>
         <div class="quantity"> Single Quantity</div>
         <div class="quantity"> 
