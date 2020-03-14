@@ -2,14 +2,6 @@
   <div>
     <span id="name">{{ name }}</span>
     <span id="extra-info">{{ extra_info }}</span> <span id="afp">AFP</span>
-    <!-- <input
-      type="number"
-      name=""
-      id="numberr"
-      @change="updateQuantity"
-      @keyup="updateQuantity"
-      style="width:60px;"
-    /> -->
     <div id="ingredients">
               <div class="ingredient-container seperate nohover">
         <div class="ingredient">
