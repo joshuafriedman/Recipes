@@ -4,10 +4,10 @@
       <Recipe :path="path" v-on:go-back="refresh" v-on:edit-recipe="editRecipe"/>
     </div>
     <div v-else-if="(is_path && edit_recipe)">
-      <edit-recipe :objec="obj" v-on:recipe-edited="recipeEdited"/>
+      <edit-recipe :objec="obj" v-on:recipe-edited="recipeEdited" v-on:exit="goBackToRecipe"/>
     </div>
     <div v-else-if="(!is_path && create_new)">
-      <create-recipe v-on:recipe-created="recipeCreated"/>
+      <create-recipe v-on:recipe-created="recipeCreated" v-on:exit="refresh"/>
     </div>
     <div v-else>
       <RecipeSearch />
@@ -75,6 +75,8 @@ export default {
     refresh: function(){
       this.path="";
       this.is_path = false;
+      this.create_new = false;
+      this.edit_recipe = false;
     },
     editRecipe: function(obj){
       this.edit_recipe = true;
@@ -82,6 +84,9 @@ export default {
       this.obj.path = this.path;
     },
     recipeEdited: function(){
+      this.edit_recipe = false;
+    },
+    goBackToRecipe: function(){
       this.edit_recipe = false;
     }
   }

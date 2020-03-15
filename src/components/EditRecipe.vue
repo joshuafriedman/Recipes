@@ -3,7 +3,8 @@
     <input type="text" id="name" placeholder="Recipe Name" v-model="name">
     <input type="text" id="extra-info" v-model="extra_info"> <span id="afp"><button @click="submit" class="submit">Submit</button></span>
     <button @click="selectLocation" class="submit" id="select-location">Choose location</button> <div id="short-path">{{shortened_path}}</div>
-    <input type="file" webkitdirectory directory name="file" id="file-location" style="display:none" @click="setNull" @change="updateFile">
+    <!-- <input type="file" webkitdirectory directory name="file" id="file-location" style="display:none" @click="setNull" @change="updateFile"> -->
+    <div id="exit" @click="exit">Exit</div>
     <div id="ingredients">
         
              <div class="ingredient-container seperate nohover" style="margin-right:0px;">
@@ -69,14 +70,6 @@ export default {
         this.ingredients.push(["","","g",this.ing_counter]);
         this.ing_counter+=1;
     },
-        setNull: function(event){
-      event.target.value = null;
-    },
-    updateFile: function(event){
-      this.path = event.target.files[0].path;
-      window.console.log(event.target.files);
-      this.var_text = "Submit"
-    },
     selectLocation: function(){
             // document.getElementById("file-location").click();
             const { dialog } = require('electron').remote
@@ -138,6 +131,12 @@ export default {
             }
         }
     },
+        exit: function(){
+        // are you sure wyou want to exit?
+        if(confirm("Exit  edit page? All progress will be lost.")){
+            this.$emit("exit");
+        }
+    }
   },
   beforeMount() {
     // us objec to initialize all values
@@ -275,5 +274,11 @@ export default {
     position: absolute;
     left: 30px;
     top:100px;
+}
+#exit{
+    position: absolute;
+    right: 30px;
+    top:10px;
+    cursor: pointer;
 }
 </style>
