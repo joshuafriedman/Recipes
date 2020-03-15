@@ -1,5 +1,7 @@
 <template>
   <div>
+    <div id="go-back" @click="goBack"> &larr; </div>
+    <div id="edit" @click="editRecipe">Edit</div>
     <span id="name">{{ name }}</span>
     <span id="extra-info">{{ extra_info }}</span> <span id="afp">AFP</span>
     <div id="ingredients">
@@ -107,7 +109,13 @@ export default {
             return number;
         }
         
-    }
+    },
+    goBack: function(){
+      this.$emit("go-back");
+    },
+    editRecipe: function(){
+      this.$emit("edit-recipe",this.obj);
+    },
   },
   beforeMount() {
     // read file
@@ -209,5 +217,17 @@ export default {
 .seperate {
   margin-top: 30px;
   font-weight: 500;
+}
+#go-back{
+  position: absolute;
+  left:25px;
+  top:25px;
+  cursor: pointer;
+}
+#edit{
+  position: absolute;
+  top: 25px;
+  right:25px;
+  cursor: pointer;
 }
 </style>

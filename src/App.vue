@@ -1,7 +1,10 @@
 <template>
   <div id="app" >
-    <div v-if="is_path">
-      <Recipe :path="path" />
+    <div v-if="(is_path && !edit_recipe)">
+      <Recipe :path="path" v-on:go-back="refresh" v-on:edit-recipe="editRecipe"/>
+    </div>
+    <div v-else-if="(is_path && edit_recipe)">
+      <edit-recipe :objec="obj" v-on:recipe-edited="recipeEdited"/>
     </div>
     <div v-else-if="(!is_path && create_new)">
       <create-recipe v-on:recipe-created="recipeCreated"/>
@@ -19,18 +22,22 @@
 import Recipe from "./components/Recipe.vue";
 import RecipeSearch from "./components/RecipeSearch.vue";
 import CreateRecipe from "./components/CreateRecipe";
+import EditRecipe from "./components/EditRecipe";
 export default {
   name: "App",
   components: {
     Recipe,
     RecipeSearch,
     CreateRecipe,
+    EditRecipe
   },
   data: function() {
     return {
       is_path: false,
       path: "",
       create_new: false,
+      edit_recipe: false,
+      obj: {}
     };
   },
   beforeMount() {
@@ -63,6 +70,18 @@ export default {
       // window.console.log(obj);
       this.path = obj.path;
       this.is_path = true;
+    },
+    refresh: function(){
+      this.path="";
+      this.is_path = false;
+    },
+    editRecipe: function(obj){
+      this.edit_recipe = true;
+      this.obj = obj;
+      this.obj.path = this.path;
+    },
+    recipeEdited: function(){
+      this.edit_recipe = false;
     }
   }
 };
