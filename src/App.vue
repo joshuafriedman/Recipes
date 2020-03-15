@@ -1,10 +1,10 @@
 <template>
-  <div id="app">
+  <div id="app" >
     <div v-if="is_path">
       <Recipe :path="path" />
     </div>
     <div v-else-if="(!is_path && create_new)">
-      <create-recipe/>
+      <create-recipe v-on:recipe-created="recipeCreated"/>
     </div>
     <div v-else>
       <RecipeSearch />
@@ -57,6 +57,13 @@ export default {
       window.console.log('creating new recipe');
       this.create_new = true;
     },
+    recipeCreated: function(obj){
+      // window.console.log("event has been heard!:" + event);
+      // window.console.log(event);
+      // window.console.log(obj);
+      this.path = obj.path;
+      this.is_path = true;
+    }
   }
 };
 </script>

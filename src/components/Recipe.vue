@@ -49,6 +49,7 @@
       <div id="instructions">
         {{ instructions }}
       </div>
+      <br> <br>
     </div>
   </div>
 </template>

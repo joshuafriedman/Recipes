@@ -1,7 +1,8 @@
 <template>
   <div>
     <input type="text" id="name" placeholder="Recipe Name" v-model="name">
-    <input type="text" id="extra-info" v-model="extra_info"> <span id="afp"><button @click="submit" id="submit">{{var_text}}</button></span>
+    <input type="text" id="extra-info" v-model="extra_info"> <span id="afp"><button @click="submit" class="submit">Submit</button></span>
+    <button @click="selectLocation" class="submit" id="select-location">Choose location</button> <div id="short-path">{{shortened_path}}</div>
     <input type="file" webkitdirectory directory name="file" id="file-location" style="display:none" @click="setNull" @change="updateFile">
     <div id="ingredients">
         
@@ -73,23 +74,60 @@ export default {
       window.console.log(event.target.files);
       this.var_text = "Submit"
     },
+    selectLocation: function(){
+            // document.getElementById("file-location").click();
+            const { dialog } = require('electron').remote
+            console.log(dialog.showOpenDialog({properties:[
+                'openDirectory',
+            ],
+            defaultPath: "~/Desktop"
+            }).then((prom)=>{
+                window.console.log(prom.filePaths,prom.canceled);
+                if(!prom.canceled) this.path = prom.filePaths[0];
+            }));
+            this.var_text = "Submit";            
+            return;
+        
+    },
     submit: function(){
         // choose a location
-        if(this.path==""){
-            document.getElementById("file-location").click();
-            return;
-        }
+
         // Gather all the data make it into a JSON object and create a new file
         if(this.name==""){
             alert("please choose a name for your recipe");
             return;
         }
-        const ingredients = this.ingredients.map((val)=>{[val[0],val[1]+val[2]]});
+        if(this.path==""){
+            alert(" Please choose a location for your recipe");
+            return;
+        }
+
+        const ingredients = this.ingredients.filter((val)=>{return val[0]!=""}).map((val)=>{return [val[0],val[1]+val[2]]});
         const obj = {name: this.name,instructions: this.instructions, extra_info: this.extra_info,ingredients};
         window.console.log('well hello');
         window.console.log(this.path);
         window.console.log(obj);
-        
+        const json_obj = JSON.stringify(obj);
+        window.console.log(json_obj);
+        // save file
+        var fs = require("fs");
+        const full_file_name = this.path+"/" + this.name + ".JSHN"
+        //first make sure there is no file with the same name
+        if(fs.existsSync(full_file_name)){
+            window.console.log('yoyoyoyo');
+            alert(this.name + " already exists in this folder, please choose another name or another folder");
+            return;
+        }
+        window.console.log('jmmmm');
+        fs.writeFile(full_file_name,json_obj,(err)=>{
+            window.console.log('lolol');
+            if(err) throw err;
+            else{
+                window.console.log('recipe saved');
+                obj.path = full_file_name;
+                this.$emit("recipe-created",obj);
+            }
+        })
 
     },
     removeIngredient: function(event){
@@ -136,6 +174,18 @@ export default {
     //   var num = total_weight * 0.9;
     //   this.sub_total_weight = "" + num.toFixed(2) + "g" + str;
     // });
+  },
+  computed:{
+      shortened_path: function(){
+        //   var path = require("path");
+        //   window.console.log(path.parse(this.path));
+          var parts = this.path.split("/");
+        //   window.console.log(parts);
+        window.console.log(parts);
+        parts.splice(0,4);
+            var short = parts.join("/");
+          return short;
+      }
   }
 };
 </script>
@@ -222,7 +272,7 @@ export default {
     width:20px;
     font-size: 14px;
 }
-#submit{
+.submit{
     width: 100px;
     height:40px;
     cursor: pointer;
@@ -233,5 +283,15 @@ export default {
     margin-left: 80px;
     cursor: pointer;
 
+}
+#select-location{
+    position: absolute;
+    left: 30px;
+    top:19px;
+}
+#short-path{
+    position: absolute;
+    left: 30px;
+    top:100px;
 }
 </style>
