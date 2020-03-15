@@ -70,6 +70,7 @@ export default {
       // window.console.log(obj);
       this.path = obj.path;
       this.is_path = true;
+      this.create_new = false;
     },
     refresh: function(){
       this.path="";
