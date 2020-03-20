@@ -20,6 +20,7 @@
       @keyup="updateQuantity"
       style="width:60px;"
       placeholder="0"
+      v-model="quantity"
     />
              </div>
       </div>
@@ -37,7 +38,8 @@
           <div class="ingredient-text">Total Weight</div>
         </div>
         <div class="quantity">{{ total_weight }}</div>
-        <div class="quantity">{{ ingQuant(quantity, total_weight) }}</div>
+        <!-- <div class="quantity">{{ ingQuant(quantity, total_weight) }}</div> -->
+        <input class="quantity" type="text" name="" id="" v-model="total_variable_weight" style="text-align:center;">
       </div>
       <div class="ingredient-container hover-effect" style="font-weight:500;">
         <div class="ingredient">
@@ -71,7 +73,9 @@ export default {
       extra_info: "",
       total_weight: "",
       sub_total_weight: "",
-      quantity: 0
+      quantity: 0,
+      total_variable_weight:"",
+      switch: true,
     };
   },
   methods: {
@@ -148,7 +152,30 @@ export default {
       this.total_weight = "" + total_weight + "g" + str;
       var num = total_weight * 0.9;
       this.sub_total_weight = "" + num.toFixed(2) + "g" + str;
+      this.total_variable_weight = this.ingQuant(this.quantity,this.total_weight);
     });
+  },
+  watch:{
+    quantity: function(){
+      if(!this.switch){
+        this.switch = true;
+        return;
+      }
+      this.switch = false;
+      this.total_variable_weight = this.ingQuant(this.quantity,this.total_weight);
+      window.console.log('watch quantity has been called' + this.quantity);
+    },
+    total_variable_weight: function(){
+      if(!this.switch){
+        this.switch = true;
+        return;
+      }
+      this.switch = false;
+      this.quantity = this.rounder(this.total_variable_weight/this.total_weight);
+      var index = this.total_weight.indexOf("ind") == -1 ? -2 : -4;
+      this.quantity = this.rounder(Number(this.total_variable_weight.slice(0, index+1))/Number(this.total_weight.slice(0, index+1)));
+      window.console.log('watch total_variable_weight has been called' + this.quantity);
+    }
   }
 };
 </script>
