@@ -21,6 +21,10 @@
   <div id="updating" style="display:none; white-space: pre-line;">
       Getting the latest update... please wait <span id="wait"></span>
     </div>
+     <p
+      id="update-message"
+      style="white-space: pre-line; text-align:left; width:500px; margin-left:auto; margin-right:auto;"
+    ></p>
   </div>
 </template>
 
@@ -118,6 +122,7 @@ export default {
       // const cmd = "npm run electron:build";
       window.console.log(cmd);
       const { exec } = require("child_process");
+
       exec(cmd, (err, stdout, stderr) => {
         if (err) {
           // node couldn't execute the command

@@ -1,7 +1,7 @@
 #!/bin/bash
 cd
-cd desktop/project/frame
-#cd projects/my-vueapp
+# cd desktop/project/frame
+cd Desktop/projects/macapp/tuggle
 x=`git pull` && if [[ "$x" == *"erge conflict"* ]]; then
          echo "there's a merge conflict, contact Josh for assistance"
     elif [[ "$x" == *"Already up to date"* ]]; then
