@@ -15,6 +15,12 @@
       <br> <br> <br>
       <button @click="createRecipe"> Create new recipe</button>
     </div>
+    <br><br><br><br><br> <br> <br> <br>
+  <button @click="getUpdate"> Get Latest Updates </button>
+  <br> <br> <br>
+  <div id="updating" style="display:none; white-space: pre-line;">
+      Getting the latest update... please wait <span id="wait"></span>
+    </div>
   </div>
 </template>
 
@@ -88,7 +94,64 @@ export default {
     },
     goBackToRecipe: function(){
       this.edit_recipe = false;
-    }
+    },
+    getUpdate: function() {
+      document.getElementById("updating").innerHTML =
+          "Getting the latest update... please wait";
+      const fs = require("fs");
+      setTimeout(() => {
+        fs.readFile("latestUpdate.txt", (err, data) => {
+          if (err) throw err;
+          data = data.toString();
+          data = data.slice(data.indexOf("$") + 1, data.length - 1);
+          document.getElementById("update-message").innerHTML = data;
+        });
+      }, 3000);
+
+      document.getElementById("updating").style.display = "block";
+
+      var path = require("path");
+      var nwDir = path.dirname(process.execPath);
+      window.console.log(process);
+      window.console.log(nwDir);
+      const cmd = "chmod u+x update.sh && ./update.sh";
+      // const cmd = "npm run electron:build";
+      window.console.log(cmd);
+      const { exec } = require("child_process");
+      exec(cmd, (err, stdout, stderr) => {
+        if (err) {
+          // node couldn't execute the command
+          window.console.log("error has occured!!!!!");
+          window.console.log(err);
+          err = err.message;
+          if(err.indexOf("error: Your local changes to the following files would be overwritten by merge")!=-1){
+          document.getElementById("update-message").style = "display:none;";
+          const merge_files = err.substr(err.indexOf("error: Your local changes to the following files would be overwritten by merge")+78,err.indexOf("Please commit your changes or stas")-129);
+          window.console.log("adsf "+ merge_files);
+          document.getElementById("updating").innerHTML =
+            "There is a merge conflict with "+merge_files +" \n please contact josh";
+        }
+          return;
+        }
+        document.getElementById("updating").innerHTML =
+          "Update Complete! Close and re-open the app for the latest update";
+        // the *entire* stdout and stderr (buffered)
+        window.console.log(`stdout: ${stdout}`);
+        window.console.log(`stderr: ${stderr}`);
+        if (stdout.indexOf("already have the latest") != -1) {
+          document.getElementById("update-message").style = "display:none;";
+          document.getElementById("updating").innerHTML =
+            "You already have the latest updates";
+        }
+        else if(stdout.indexOf("error: Your local changes to the following files would be overwritten by merge")!=-1){
+          document.getElementById("update-message").style = "display:none;";
+          const merge_files = stdout.substr(stdout.indexOf("error: Your local changes to the following files would be overwritten by merge"),stdout.indexOf("Please commit your changes or stas"));
+          document.getElementById("updating").innerHTML =
+            "There is a merge conflict with "+merge_files +"\n please contact josh";
+        }
+
+      });
+    },
   }
 };
 </script>
