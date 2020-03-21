@@ -39,11 +39,11 @@
         </div>
         <div class="quantity">{{ total_weight }}</div>
         <!-- <div class="quantity">{{ ingQuant(quantity, total_weight) }}</div> -->
-        <input class="quantity" type="text" name="" id="" v-model="total_variable_weight" style="text-align:center;">
+        <input class="quantity" type="text" v-model="total_variable_weight" style="text-align:center; font-size:16px;">
       </div>
       <div class="ingredient-container hover-effect" style="font-weight:500;">
         <div class="ingredient">
-          <div class="ingredient-text">Total Weight -10%</div>
+          <div class="ingredient-text" style="padding-right:5px;">Total Weight - </div><span><input type="number" style="width:30px; font-size:16px;" v-model="percent">%</span> 
         </div>
         <div class="quantity">{{ ingQuant(1,sub_total_weight) }}</div>
         <div class="quantity">{{ ingQuant(quantity, sub_total_weight) }}</div>
@@ -76,6 +76,7 @@ export default {
       quantity: 0,
       total_variable_weight:"",
       switch: true,
+      percent:10,
     };
   },
   methods: {
@@ -175,7 +176,11 @@ export default {
       var index = this.total_weight.indexOf("ind") == -1 ? -2 : -4;
       this.quantity = this.rounder(Number(this.total_variable_weight.slice(0, index+1))/Number(this.total_weight.slice(0, index+1)));
       window.console.log('watch total_variable_weight has been called' + this.quantity);
-    }
+    },
+    percent: function(){
+      let percentage = this.rounder(1-this.percent/100);
+      this.sub_total_weight = this.ingQuant(percentage, this.total_weight);
+    },
   }
 };
 </script>
