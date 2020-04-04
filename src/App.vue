@@ -136,6 +136,10 @@ export default {
           document.getElementById("updating").innerHTML =
             "There is a merge conflict with "+merge_files +" \n please contact josh";
         }
+        else{
+          document.getElementById("updating").innerHTML =
+          "A small error has occured, talk to josh";
+        }
           return;
         }
         document.getElementById("updating").innerHTML =
