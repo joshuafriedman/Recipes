@@ -18,7 +18,7 @@ x=`git pull` && if [[ "$x" == *"erge conflict"* ]]; then
     #export PATH=$PATH:/anaconda2/bin:/opt/local/bin:/opt/local/sbin:/Library/Frameworks/Python.framework/Versions/3.5/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/TeX/texbin:/usr/local/share/dotnet:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Applications/Xamarin
     export PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
     { #try
-        npm run electron:build
+        npm install && npm run electron:build
     } || { #catch
         echo "npm run build electron:build has failed"
     }
