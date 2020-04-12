@@ -14,7 +14,7 @@
       Open a recipe <input type="file" @click="setNull" @change="updateFile" />
       <br> <br> <br>
       <button @click="createRecipe"> Create new recipe</button>
-    </div>
+    
     <br><br><br><br><br> <br> <br> <br>
   <button @click="getUpdate"> Get Latest Updates </button>
   <br> <br> <br>
@@ -25,6 +25,7 @@
       id="update-message"
       style="white-space: pre-line; text-align:left; width:500px; margin-left:auto; margin-right:auto;"
     ></p>
+    </div>
   </div>
 </template>
 
