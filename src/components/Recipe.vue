@@ -87,7 +87,13 @@ export default {
     // calculate the new mulitplied quantity
     ingQuant: function(multiplier, quant) { 
       multiplier = multiplier || 0;
+      // window.console.log('hiaare');
+      if(isNaN(multiplier))multiplier=0;
+      // let p = multiplier || 99
+      // window.console.log(p);
       multiplier = Number(multiplier);
+      window.console.log('here');
+      window.console.log(multiplier);
       var final_string, final_quantity;
       var index = quant.indexOf("ind") == -1 ? -2 : -4;
       var num = multiplier * Number(quant.slice(0, index+1));
