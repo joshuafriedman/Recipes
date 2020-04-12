@@ -161,6 +161,22 @@ export default {
 
       });
     },
+    changeTitle: function(new_title){
+      window.console.log(document.getElementsByTagName("title"))
+      window.console.log(document.getElementsByTagName('head')[0].getElementsByTagName("title")[0]);
+      window.console.log('test is below ADSFKADS FASKDJFAKSDJFAKDF DFJHASDFJ DASF');
+      window.console.log(document.getElementsByTagName('head'));
+      document.getElementsByTagName('head')[0].getElementsByTagName("title")[0].innerHTML = new_title;
+      window.console.log(new_title);
+    }
+  },
+  watch:{
+    path: function(){
+      //update the title
+      var path = require('path')
+      let new_path = this.path==""?"Frame":path.basename(this.path);
+      this.changeTitle(new_path.substring(0,new_path.length-5))
+    }
   }
 };
 </script>

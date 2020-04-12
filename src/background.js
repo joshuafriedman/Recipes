@@ -11,17 +11,25 @@ var ready = false
 // be closed automatically when the JavaScript object is garbage collected.
 var custom = ""
 let win
-
+let win1
+let first = true
+let count=-1
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([{scheme: 'app', privileges: { secure: true, standard: true } }])
 
 
   function createWindow () {
+    count+=1
+    let str = "okayu "+count
       // Create the browser window.
-    win = new BrowserWindow({ width: 800, height: 600, webPreferences: {
-      nodeIntegration: true
+    win = new BrowserWindow({ width: 800, height: 600, tabbingIdentifier:str,webPreferences: {
+      nodeIntegration: true,
+      webviewTag: true,
+      spellcheck: true
     } })
     win.custom = ""+custom // JOSH EDIT
+    if(first)win.toggleTabBar()
+    if(first)console.log("is first")
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
@@ -31,10 +39,62 @@ protocol.registerSchemesAsPrivileged([{scheme: 'app', privileges: { secure: true
     // Load the index.html when not in development
     win.loadURL('app://./index.html')
   }
+  if(first){ // if first 
+    first = false;
+    win1 = win
+  }
   custom=""
   win.on('closed', () => {
     win = null
   })
+}
+
+app.on("new-window-for-tab",()=>{
+  console.log("new-window-for-tab event fired")
+  try{
+  addTab(win1)
+  }
+  catch(err){
+    console.log(err);
+  }
+})
+
+function addTab(inp_win){
+  count+=1
+  let str = "ttab " + count
+  let win = new BrowserWindow({ width: 800, height: 600,webPreferences: {
+    nodeIntegration: true,
+    webviewTag: true,
+    spellcheck: true
+  },
+  tabbingIdentifier:str,
+})
+win.custom = ""
+if (process.env.WEBPACK_DEV_SERVER_URL) {
+  // Load the url of the dev server if in development mode
+  win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
+  win.toggleTabBar();
+  // if(win1)win.addTabbedWindow(win1);
+  // win1 = win;
+  if (!process.env.IS_TEST) win.webContents.openDevTools()
+} else {
+  createProtocol('app')
+  // Load the index.html when not in development
+  win.loadURL('app://./index.html')
+}
+
+win.on('closed', () => {
+  win = null
+})
+win.on('page-title-updated', function(e,title,a) {
+  // e.preventDefault()
+  console.log("Adsf")
+  console.log(e);
+  console.log(title)
+  console.log(a)
+});
+inp_win.addTabbedWindow(win)
+// win.addTabbedWindow(inp_win)
 }
 
 // Quit when all windows are closed.
