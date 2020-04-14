@@ -86,6 +86,8 @@ export default {
     },
     // calculate the new mulitplied quantity
     ingQuant: function(multiplier, quant) { 
+      quant=quant || ""
+      quant = quant.toString();
       multiplier = multiplier || 0;
       // window.console.log('hiaare');
       if(isNaN(multiplier))multiplier=0;
