@@ -91,9 +91,13 @@ export default {
       if(isNaN(multiplier))multiplier=0;
       // let p = multiplier || 99
       // window.console.log(p);
+      // window.console.log('here are some things');
+            // window.console.log(multiplier);
+            // window.console.log(quant);
       multiplier = Number(multiplier);
-      window.console.log('here');
-      window.console.log(multiplier);
+      quant=quant.replace(" + ?","")
+      // window.console.log('here');
+      // window.console.log(multiplier);
       var final_string, final_quantity;
       var index = quant.indexOf("ind") == -1 ? -2 : -4;
       var num = multiplier * Number(quant.slice(0, index+1));
@@ -159,7 +163,7 @@ export default {
       this.total_weight = "" + total_weight + "g" + str;
       var num = total_weight * 0.9;
       this.sub_total_weight = "" + num.toFixed(2) + "g" + str;
-      this.total_variable_weight = this.ingQuant(this.quantity,this.total_weight);
+      this.total_variable_weight = this.ingQuant(this.quantity,total_weight);
     });
   },
   watch:{
@@ -178,9 +182,12 @@ export default {
         return;
       }
       this.switch = false;
-      this.quantity = this.rounder(this.total_variable_weight/this.total_weight);
-      var index = this.total_weight.indexOf("ind") == -1 ? -2 : -4;
-      this.quantity = this.rounder(Number(this.total_variable_weight.slice(0, index+1))/Number(this.total_weight.slice(0, index+1)));
+      let total_weight = this.total_weight.replace(" + ?","")
+      this.quantity = this.rounder(this.total_variable_weight/total_weight);
+      var index = total_weight.indexOf("ind") == -1 ? -2 : -4;
+      this.quantity = this.rounder(Number(this.total_variable_weight.slice(0, index+1))/Number(total_weight.slice(0, index+1)));
+      window.console.log(total_weight.slice(0, index+1));
+      window.console.log(Number(total_weight.slice(0, index+1)) + "   aa");
       window.console.log('watch total_variable_weight has been called' + this.quantity);
     },
     percent: function(){
