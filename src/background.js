@@ -11,17 +11,24 @@ var ready = false
 // be closed automatically when the JavaScript object is garbage collected.
 var custom = ""
 let win
-
+let first = true
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([{scheme: 'app', privileges: { secure: true, standard: true } }])
 
 
   function createWindow () {
       // Create the browser window.
-    win = new BrowserWindow({ width: 800, height: 600, webPreferences: {
-      nodeIntegration: true
+    win = new BrowserWindow({ width: 800, height: 600, tabbingIdentifier:"wooow",webPreferences: {
+      nodeIntegration: true,
+      webviewTag: true,
+      spellcheck: true
     } })
     win.custom = ""+custom // JOSH EDIT
+    if(first){
+      win.toggleTabBar()
+      console.log("is first")
+      first = false
+    }
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
@@ -31,10 +38,54 @@ protocol.registerSchemesAsPrivileged([{scheme: 'app', privileges: { secure: true
     // Load the index.html when not in development
     win.loadURL('app://./index.html')
   }
+
   custom=""
   win.on('closed', () => {
     win = null
   })
+}
+
+app.on("new-window-for-tab",()=>{
+  console.log("new-window-for-tab event fired")
+  try{
+  addTab()
+  }
+  catch(err){
+    console.log(err);
+  }
+})
+
+function addTab(){
+  let win = new BrowserWindow({ width: 800, height: 600,webPreferences: {
+    nodeIntegration: true,
+    webviewTag: true,
+    spellcheck: true
+  },
+  tabbingIdentifier:"wooow",
+  center: false,
+  // parent:inp_win
+})
+win.custom = ""
+if (process.env.WEBPACK_DEV_SERVER_URL) {
+  // Load the url of the dev server if in development mode
+  win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
+  // win.toggleTabBar();
+  // if(win1)win.addTabbedWindow(win1);
+  // win1 = win;
+  if (!process.env.IS_TEST) win.webContents.openDevTools()
+} else {
+  createProtocol('app')
+  // Load the index.html when not in development
+  win.loadURL('app://./index.html')
+}
+
+win.on('closed', () => {
+  win = null
+})
+
+  // inp_win.addTabbedWindow(win)
+
+// win.addTabbedWindow(inp_win)
 }
 
 // Quit when all windows are closed.
@@ -83,6 +134,7 @@ app.on('ready', async () => {
 app.on('open-file', (event,path) => {
   custom =path 
   if(ready){
+    first = true
     createWindow()
   }
   event.preventDefault()
@@ -104,5 +156,9 @@ if (isDevelopment) {
     })
   }
 }
+
+
+
+
 
 
