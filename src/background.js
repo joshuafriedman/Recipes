@@ -11,7 +11,6 @@ var ready = false
 // be closed automatically when the JavaScript object is garbage collected.
 var custom = ""
 let win
-let win1
 let first = true
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([{scheme: 'app', privileges: { secure: true, standard: true } }])
@@ -25,11 +24,10 @@ protocol.registerSchemesAsPrivileged([{scheme: 'app', privileges: { secure: true
       spellcheck: true
     } })
     win.custom = ""+custom // JOSH EDIT
-    if(first)win.toggleTabBar()
-    if(first)console.log("is first")
-    if(first){ // if first 
-      first = false;
-      win1 = win
+    if(first){
+      win.toggleTabBar()
+      console.log("is first")
+      first = false
     }
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
@@ -136,6 +134,7 @@ app.on('ready', async () => {
 app.on('open-file', (event,path) => {
   custom =path 
   if(ready){
+    first = true
     createWindow()
   }
   event.preventDefault()
@@ -157,5 +156,9 @@ if (isDevelopment) {
     })
   }
 }
+
+
+
+
 
 
