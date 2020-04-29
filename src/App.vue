@@ -118,7 +118,7 @@ export default {
       var nwDir = path.dirname(process.execPath);
       window.console.log(process);
       window.console.log(nwDir);
-      const cmd = "chmod u+x update.sh && ./update.sh";
+      const cmd = "cd && cd desktop/project/frame && chmod u+x update.sh && ./update.sh";
       // const cmd = "npm run electron:build";
       window.console.log(cmd);
       const { exec } = require("child_process");
