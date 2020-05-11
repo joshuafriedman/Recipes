@@ -110,13 +110,38 @@ export default {
       return final_string;
     },
     rounder: function(number){
-        number = number.toFixed(2)
+        number = number.toFixed(5)
         // if num = has no decimals return num
         var decimals = number.toString().split(".")[1];
         if (!decimals) return number;
-        // if number conatains 1 single decimal / the last decimal is 0
         const a = decimals[0];
         const b = decimals[1];
+        // if number is less than 1 then be accurate to 2 sig figs
+        if(a==0){
+          let temp_num = "0.";
+          let last = false;
+          let count = 0;
+          for(const i of b){
+            if(count>4){
+              return Number(temp_num);
+            }
+            count+=1;
+            if(last){
+              temp_num+=i;
+              return Number(temp_num);
+            }
+            if(i!="0") {
+              last = true;
+            }
+            temp_num+=i;
+
+
+          }
+
+        }
+
+        // if number conatains 1 single decimal or the last decimal is 0
+
         if(!b || b==0){
             return Number(number.toString())
         }
