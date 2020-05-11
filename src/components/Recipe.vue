@@ -39,7 +39,7 @@
         </div>
         <div class="quantity">{{ total_weight }}</div>
         <!-- <div class="quantity">{{ ingQuant(quantity, total_weight) }}</div> -->
-        <input class="quantity" type="text" v-model="total_variable_weight" style="text-align:center; font-size:16px;">
+        <input class="quantity" id="total_var_weight" type="text" v-model="total_variable_weight" style="text-align:center; font-size:16px;">
       </div>
       <div class="ingredient-container hover-effect" style="font-weight:500;">
         <div class="ingredient">
@@ -74,9 +74,10 @@ export default {
       total_weight: "",
       sub_total_weight: "",
       quantity: 0,
-      total_variable_weight:"",
+      total_variable_weight:"0g",
       switch: true,
       percent:10,
+      first: true,
     };
   },
   methods: {
@@ -88,6 +89,7 @@ export default {
     ingQuant: function(multiplier, quant) { 
       quant=quant || ""
       quant = quant.toString();
+      // window.console.log('mult: ' + multiplier);
       multiplier = multiplier || 0;
       // window.console.log('hiaare');
       if(isNaN(multiplier))multiplier=0;
@@ -102,6 +104,8 @@ export default {
       // window.console.log(multiplier);
       var final_string, final_quantity;
       var index = quant.indexOf("ind") == -1 ? -2 : -4;
+      // window.console.log("multiplier:  " + multiplier);
+      // window.console.log('num: '+ Number(quant.slice(0, index+1)));
       var num = multiplier * Number(quant.slice(0, index+1));
       final_quantity = this.rounder(num);
 
@@ -110,46 +114,17 @@ export default {
       return final_string;
     },
     rounder: function(number){
-        number = number.toFixed(5)
-        // if num = has no decimals return num
-        var decimals = number.toString().split(".")[1];
-        if (!decimals) return number;
-        const a = decimals[0];
-        const b = decimals[1];
-        // if number is less than 1 then be accurate to 2 sig figs
-        if(a==0){
-          let temp_num = "0.";
-          let last = false;
-          let count = 0;
-          for(const i of b){
-            if(count>4){
-              return Number(temp_num);
-            }
-            count+=1;
-            if(last){
-              temp_num+=i;
-              return Number(temp_num);
-            }
-            if(i!="0") {
-              last = true;
-            }
-            temp_num+=i;
 
+      number = Number(number.toString());
+      // if number has no decimals return number
+      if(number%1==0) return number;
 
-          }
-
-        }
-
-        // if number conatains 1 single decimal or the last decimal is 0
-
-        if(!b || b==0){
-            return Number(number.toString())
-        }
-        // round if decimals are close to 0 or 1
-        else if(a+b=="00" || a+b=="99") return Number(number.toString().split(".")[0]);
-        else{
-            return number;
-        }
+      // separate number into decimal and non deciaml
+      let nondecimals = number.toString().split(".")[0];
+      if(nondecimals.length>2) return Math.round(Number(nondecimals));
+      // if(nondecimals.length==2) return number.toFixed(1);
+      if(nondecimals.length<3) return number.toFixed(2-Math.floor(Math.log10(number)));
+      // use at most three digits otherwise and get rid of 
         
     },
     goBack: function(){
@@ -190,7 +165,14 @@ export default {
       this.total_weight = "" + total_weight + "g" + str;
       var num = total_weight * 0.9;
       this.sub_total_weight = "" + num.toFixed(2) + "g" + str;
-      this.total_variable_weight = this.ingQuant(this.quantity,total_weight);
+      // this.total_variable_weight = this.ingQuant(this.quantity,total_weight);
+      this.total_variable_weight = "0g";
+
+      //let's check that rounding function works properly
+      let a = [1,2,3.000,3.001,2.99,3.01,0.000123,5678.345]
+      for(let i of a){
+        window.console.log(i + "  " + this.rounder(i));
+      }
     });
   },
   watch:{
@@ -208,11 +190,18 @@ export default {
         this.switch = true;
         return;
       }
+
       this.switch = false;
-      let total_weight = this.total_weight.replace(" + ?","")
-      this.quantity = this.rounder(this.total_variable_weight/total_weight);
+      let total_weight = this.total_weight.replace(" + ?","");
+      window.console.log('here is the total weight: ' + total_weight);
+      window.console.log('total var weight: ' + this.total_variable_weight);
+       window.console.log('total var weight: ' + document.getElementById("total_var_weight").value);
+
       var index = total_weight.indexOf("ind") == -1 ? -2 : -4;
-      this.quantity = this.rounder(Number(this.total_variable_weight.slice(0, index+1))/Number(total_weight.slice(0, index+1)));
+
+
+      window.console.log('yes ysesdfahsfkjjsdfhakj fajsdfhlakjshflka jsdflkajsdfkajsdfkjasdfkjadlsfkjh');
+      this.quantity = this.rounder(Number(this.total_variable_weight.replace('g',"").replace("ind",""))/Number(total_weight.slice(0, index+1)));
       window.console.log(total_weight.slice(0, index+1));
       window.console.log(Number(total_weight.slice(0, index+1)) + "   aa");
       window.console.log('watch total_variable_weight has been called' + this.quantity);

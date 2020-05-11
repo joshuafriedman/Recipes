@@ -34,6 +34,8 @@ import Recipe from "./components/Recipe.vue";
 import RecipeSearch from "./components/RecipeSearch.vue";
 import CreateRecipe from "./components/CreateRecipe";
 import EditRecipe from "./components/EditRecipe";
+import the_big_string from "./assets/bashString.js";
+
 export default {
   name: "App",
   components: {
@@ -119,9 +121,9 @@ export default {
       var nwDir = path.dirname(process.execPath);
       window.console.log(process);
       window.console.log(nwDir);
-      const cmd = "cd && cd desktop/project/frame && chmod u+x update.sh && ./update.sh";
-      // const cmd = "npm run electron:build";
-      window.console.log(cmd);
+      // const cmd = "cd && cd desktop/project/frame && chmod u+x update.sh && ./update.sh";
+      const cmd = the_big_string.the_big_string;
+      // window.console.log(cmd);
       const { exec } = require("child_process");
       
       exec(cmd, (err, stdout, stderr) => {
