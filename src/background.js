@@ -160,7 +160,7 @@ if (isDevelopment) {
 
 
 
-
+const options ={printBackground:true};
 const template = [
   {
      label: 'Edit',
@@ -183,6 +183,9 @@ const template = [
         {
            role: 'paste'
         },
+        {
+          role: 'quit'
+        }
 
      ]
   },
@@ -193,7 +196,9 @@ const template = [
         label: 'print',
         accelerator: 'Cmd+P',
         click(){
-          win.webContents.print()
+          win.webContents.print(options,(success,errorType)=>{
+            if (!success) console.log(errorType)
+          })
         }
       }
     ]

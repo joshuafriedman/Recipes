@@ -304,7 +304,8 @@ export default {
   cursor: pointer;
 }
 .alternate{
-  background-color:rgb(223, 223, 223);
+  background-color:rgb(244, 244, 244);
+  -webkit-print-color-adjust: exact
 }
 .down{
   position:relative;
