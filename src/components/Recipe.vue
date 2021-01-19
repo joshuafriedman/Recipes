@@ -309,7 +309,7 @@ export default {
 }
 .down{
   position:relative;
-  bottom: -10px;
+  bottom: -20px;
 }
 .hide-box{
   border:none;

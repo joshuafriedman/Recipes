@@ -10,21 +10,33 @@
       <create-recipe v-on:recipe-created="recipeCreated" v-on:exit="refresh"/>
     </div>
     <div v-else>
-      <RecipeSearch />
-      Open a recipe <input type="file" @click="setNull" @change="updateFile" />
-      <br> <br> <br>
-      <button @click="createRecipe"> Create new recipe</button>
+      <div class="flex-row">
+      
+      <div>
+        Open a recipe <input type="file" @click="setNull" @change="updateFile" />
+        <br> <br> <br>
+      </div>
+
+        <div>
+          <button @click="createRecipe"> Create new recipe</button>
+        </div>
     
     <br><br><br><br><br> <br> <br> <br>
-  <button @click="getUpdate"> Get Latest Updates </button>
-  <br> <br> <br>
-  <div id="updating" style="display:none; white-space: pre-line;">
-      Getting the latest update... please wait <span id="wait"></span>
+  <div>
+    <button @click="getUpdate"> Get Latest Updates </button>
+    <br> <br> <br>
+    <div id="updating" style="display:none; white-space: pre-line;">
+        Getting the latest update... please wait <span id="wait"></span>
+      </div>
+       <p
+        id="update-message"
+        style="white-space: pre-line; text-align:left; width:500px; margin-left:auto; margin-right:auto;"
+      ></p>
+  </div>
     </div>
-     <p
-      id="update-message"
-      style="white-space: pre-line; text-align:left; width:500px; margin-left:auto; margin-right:auto;"
-    ></p>
+    <br> <br>
+    the search
+    <RecipeSearch v-on:openRecipe="openTheRecipe" />
     </div>
   </div>
 </template>
@@ -66,6 +78,11 @@ export default {
     }
   },
   methods:{
+    openTheRecipe: function(e){
+      window.console.log(e,'testing');
+      this.path = e;
+      this.is_path = true;
+    },
     setNull: function(event){
       event.target.value = null;
     },
@@ -78,9 +95,6 @@ export default {
       this.create_new = true;
     },
     recipeCreated: function(obj){
-      // window.console.log("event has been heard!:" + event);
-      // window.console.log(event);
-      // window.console.log(obj);
       this.path = obj.path;
       this.is_path = true;
       this.create_new = false;
@@ -184,7 +198,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -192,5 +206,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.flex-row{
+  display:flex;
+  flex-direction: row;
 }
 </style>

@@ -17,6 +17,7 @@
     "@babel/preset-env": "^7.12.11",
     "core-js": "^3.6.4",
     "electron": "^8.1.0",
+    "recursive-readdir": "^2.2.2",
     "vue": "^2.6.11",
     "vue-electron": "^1.0.6"
   },

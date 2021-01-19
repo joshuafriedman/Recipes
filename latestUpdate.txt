@@ -1,4 +1,4 @@
 writeee the latest update for aaron in this line startingg from line 2: $
 Hey Aaron,
 
-There will be a weight input update 
+New recipe search, and printing as well as a prettier print option.
