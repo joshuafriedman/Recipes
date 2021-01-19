@@ -1,15 +1,15 @@
 <template>
   <div>
-    <div id="go-back" @click="goBack"> &larr; </div>
-    <div id="edit" @click="editRecipe">Edit</div>
-    <span id="name">{{ name }}</span>
+    <div v-if="edit" id="go-back" @click="goBack"> &larr; </div>
+    <div v-if="edit" id="edit" @click="editRecipe">Edit</div>
+    <span id="name" @click="toggleViewMode">{{ name }}</span>
     <span id="extra-info">{{ extra_info }}</span> <span id="afp">AFP</span>
     <div id="ingredients">
               <div class="ingredient-container seperate nohover">
         <div class="ingredient">
-          <div class="ingredient-text">Ingredient Name</div>
+          <div class="ingredient-text down">Ingredient Name</div>
         </div>
-        <div class="quantity"> Single Quantity</div>
+        <div class="quantity down"> Single Quantity</div>
         <div class="quantity"> 
             Variable Quantity
                 <input
@@ -18,14 +18,15 @@
       id="numberr"
       @change="updateQuantity"
       @keyup="updateQuantity"
-      style="width:60px;"
+      style="width:60px;font-size:16px;"
       placeholder="0"
       v-model="quantity"
+      :class="{'hide-box':!edit}"
     />
              </div>
       </div>
-      <div v-for="ingredient in ingredients" :key="ingredient.id">
-        <div class="ingredient-container hover-effect">
+      <div v-for="(ingredient,index) in ingredients" :key="ingredient.id">
+        <div class="ingredient-container hover-effect" :class="{'alternate':!edit&&index%2==0}">
           <div class="ingredient">
             <div class="ingredient-text">{{ ingredient[0] }}</div>
           </div>
@@ -39,11 +40,11 @@
         </div>
         <div class="quantity">{{ total_weight }}</div>
         <!-- <div class="quantity">{{ ingQuant(quantity, total_weight) }}</div> -->
-        <input class="quantity" id="total_var_weight" type="text" v-model="total_variable_weight" style="text-align:center; font-size:16px;">
+        <input :class="{'hide-box':!edit}" class="quantity" id="total_var_weight" type="text" v-model="total_variable_weight" style="text-align:center; font-size:16px;">
       </div>
       <div class="ingredient-container hover-effect" style="font-weight:500;">
         <div class="ingredient">
-          <div class="ingredient-text" style="padding-right:5px;">Total Weight - </div><span><input type="number" style="width:30px; font-size:16px;" v-model="percent">%</span> 
+          <div class="ingredient-text" style="padding-right:5px;">Total Weight - </div><span><input :class="{'hide-box':!edit}" type="number" style="width:30px; font-size:16px;" v-model="percent">%</span> 
         </div>
         <div class="quantity">{{ ingQuant(1,sub_total_weight) }}</div>
         <div class="quantity">{{ ingQuant(quantity, sub_total_weight) }}</div>
@@ -78,6 +79,7 @@ export default {
       switch: true,
       percent:10,
       first: true,
+      edit: true, // view mode
     };
   },
   methods: {
@@ -132,6 +134,9 @@ export default {
     },
     editRecipe: function(){
       this.$emit("edit-recipe",this.obj);
+    },
+    toggleViewMode: function(){ // switch view between edit and print
+      this.edit = !this.edit;
     },
   },
   beforeMount() {
@@ -265,6 +270,13 @@ export default {
   font-size: 24px;
 }
 
+#name:hover{
+  cursor:pointer;
+}
+#name:active{
+  font-weight: bold;
+}
+
 #extra-info {
   text-align: right;
   position: absolute;
@@ -290,5 +302,15 @@ export default {
   top: 25px;
   right:25px;
   cursor: pointer;
+}
+.alternate{
+  background-color:rgb(223, 223, 223);
+}
+.down{
+  position:relative;
+  bottom: -10px;
+}
+.hide-box{
+  border:none;
 }
 </style>
