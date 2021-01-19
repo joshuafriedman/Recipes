@@ -13,6 +13,8 @@
   },
   "main": "background.js",
   "dependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
     "core-js": "^3.6.4",
     "electron": "^8.1.0",
     "vue": "^2.6.11",

@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, protocol, BrowserWindow } from 'electron'
+import { app, protocol, BrowserWindow ,  Menu, webContents} from 'electron'
 import {
   createProtocol,
   /* installVueDevtools */
@@ -21,7 +21,7 @@ protocol.registerSchemesAsPrivileged([{scheme: 'app', privileges: { secure: true
     win = new BrowserWindow({ width: 800, height: 600, tabbingIdentifier:"wooow",webPreferences: {
       nodeIntegration: true,
       webviewTag: true,
-      spellcheck: true
+      spellcheck: true,
     } })
     win.custom = ""+custom // JOSH EDIT
     if(first){
@@ -161,4 +161,95 @@ if (isDevelopment) {
 
 
 
+const template = [
+  {
+     label: 'Edit',
+     submenu: [
+        {
+           role: 'undo'
+        },
+        {
+           role: 'redo'
+        },
+        {
+           type: 'separator'
+        },
+        {
+           role: 'cut'
+        },
+        {
+           role: 'copy'
+        },
+        {
+           role: 'paste'
+        },
 
+     ]
+  },
+  {
+    label: 'File',
+    submenu: [
+      {
+        label: 'print',
+        accelerator: 'Cmd+P',
+        click(){
+          win.webContents.print()
+        }
+      }
+    ]
+  },
+  
+  {
+     label: 'View',
+     submenu: [
+        {
+           role: 'reload'
+        },
+        {
+           role: 'toggledevtools'
+        },
+        {
+           type: 'separator'
+        },
+        {
+           role: 'resetzoom'
+        },
+        {
+           role: 'zoomin'
+        },
+        {
+           role: 'zoomout'
+        },
+        {
+           type: 'separator'
+        },
+        {
+           role: 'togglefullscreen'
+        }
+     ]
+  },
+  
+  {
+     role: 'window',
+     submenu: [
+        {
+           role: 'minimize'
+        },
+        {
+           role: 'close'
+        }
+     ]
+  },
+  
+  {
+     role: 'help',
+     submenu: [
+        {
+           label: 'Learn More'
+        }
+     ]
+  }
+]
+
+const menu = Menu.buildFromTemplate(template)
+Menu.setApplicationMenu(menu)
