@@ -160,7 +160,7 @@ if (isDevelopment) {
 
 
 
-const options ={printBackground:true};
+const options ={printBackground:true,color:false};
 const template = [
   {
      label: 'Edit',
