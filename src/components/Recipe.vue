@@ -17,9 +17,9 @@
       name=""
       id="numberr"
       @change="updateQuantity"
-      @keyup="updateQuantity"
+      
       style="width:60px;font-size:16px;"
-      placeholder="0"
+      placeholder=""
       v-model="quantity"
       :class="{'hide-box':!edit}"
     />
@@ -44,7 +44,7 @@
       </div>
       <div class="ingredient-container hover-effect" style="font-weight:500;">
         <div class="ingredient">
-          <div class="ingredient-text" style="padding-right:5px;">Total Weight - </div><span><input :class="{'hide-box':!edit}" type="number" style="width:30px; font-size:16px;" v-model="percent">%</span> 
+          <div class="ingredient-text" style="padding-right:5px;">Total Weight - </div><span><input :class="{'hide-box':!edit}" type="number" style="width:40px; font-size:16px;" v-model="percent">%</span> 
         </div>
         <div class="quantity">{{ ingQuant(1,sub_total_weight) }}</div>
         <div class="quantity">{{ ingQuant(quantity, sub_total_weight) }}</div>
@@ -184,6 +184,7 @@ export default {
       this.switch = false;
       this.total_variable_weight = this.ingQuant(this.quantity,this.total_weight);
       window.console.log('watch quantity has been called' + this.quantity);
+      window.console.log(this.quantity == '');
     },
     total_variable_weight: function(){
       if(!this.switch){
