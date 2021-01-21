@@ -173,11 +173,6 @@ export default {
       // this.total_variable_weight = this.ingQuant(this.quantity,total_weight);
       this.total_variable_weight = "0g";
 
-      //let's check that rounding function works properly
-      let a = [1,2,3.000,3.001,2.99,3.01,0.000123,5678.345]
-      for(let i of a){
-        window.console.log(i + "  " + this.rounder(i));
-      }
     });
   },
   watch:{
@@ -246,7 +241,6 @@ export default {
 }
 
 .hover-effect:hover {
-  background-color: blue;
   color: red;
 }
 .quantity {

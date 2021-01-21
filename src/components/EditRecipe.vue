@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @keydown="checkKeyMove">
     <input type="text" id="name" placeholder="Recipe Name" v-model="name">
     <input type="text" id="extra-info" v-model="extra_info"> <span id="afp"><button @click="submit" class="submit">Submit</button></span>
     <button @click="selectLocation" class="submit" id="select-location">Choose location</button> <div id="short-path">{{shortened_path}}</div>
@@ -136,7 +136,194 @@ export default {
         if(confirm("Exit  edit page? All progress will be lost.")){
             this.$emit("exit");
         }
-    }
+    },
+        checkKeyMove: function(evt) {
+      const keycode = evt.keyCode;
+      var target = evt.target;
+      window.console.log("targetid is " + target.id + " " + target.tagName);
+      if (target.id === "instructions" && !(keycode == 38 || keycode == 37))
+        return;
+      let count = 0;
+      if (target.id == "name") {
+        try {
+          if (keycode == 40)
+            document
+              .getElementById("ingredients")
+              .querySelectorAll(".ingredient-text")[1]
+              .focus();
+          if (keycode == 39 && target.selectionEnd === target.value.length)
+            document.getElementById("extra-info").focus();
+        } catch {
+          return;
+        }
+                if(keycode===13) document.getElementById("extra-info").focus();
+
+        return;
+      }
+      if (target.id == "extra-info") {
+        if (keycode == 40 || keycode == 39 || keycode == 13)
+          document
+            .getElementById("ingredients")
+            .querySelectorAll(".ingredient-text")[1]
+            .focus();
+        if (keycode == 37 && target.selectionEnd == 0)
+          document.getElementById("name").focus();
+        return;
+      }
+      if (target.tagName.toLowerCase() == "button") {
+        document
+          .getElementById("ingredients")
+          .querySelectorAll(".ingredient-text")[1]
+          .focus();
+        return;
+      }
+      if (keycode === 13) {
+        window.console.log("ayyy");
+        var next = target;
+        var first = true;
+        window.console.log(target);
+        window.console.log(next);
+        window.console.log("here is classname", next.className);
+        if (next.className == "unit") {
+          try {
+            next.parentElement.parentElement.nextElementSibling.children[0].children[0].children[0].focus();
+          } catch {
+            document.getElementById("instructions").focus();
+          }
+          evt.preventDefault();
+          return;
+        }
+        while (count < 3) {
+          //  window.console.log(next.tagName);
+          if (!first && next.tagName.toLowerCase() === "input") {
+            next.focus();
+            break;
+          }
+          first = false;
+          if (next.nextElementSibling == null) {
+            count += 1;
+            next = next.parentElement;
+            continue;
+          }
+          next = next.nextElementSibling;
+        }
+      } else if (keycode == 38) {
+        // up arrow key
+        let class_name = target.className;
+        window.console.log(target.id);
+        if (target.id === "instructions") {
+          if(target.selectionStart != 0) return;
+          try {
+            let els = document
+              .getElementById("ingredients")
+              .querySelectorAll(".ingredient-text");
+            els[els.length - 1].focus();
+          } catch (err) {
+            window.console.log(err);
+          }
+          return;
+        }
+        let grand_parent = target.parentElement.parentElement;
+        if (class_name === "ingredient-text") {
+          grand_parent = grand_parent.parentElement;
+          try {
+            grand_parent.previousElementSibling.children[0].children[0].children[0].focus();
+          } catch {
+            window.console.log("no input above");
+            document.getElementById("name").focus();
+          }
+        } else {
+          try {
+            grand_parent.previousElementSibling.children[0]
+              .querySelector("." + class_name)
+              .focus();
+          } catch (err) {
+            // window.console.log(err);
+            window.console.log("no input above");
+            document.getElementById("name").focus();
+          }
+        }
+      } else if (keycode == 40) {
+        // down arrow key
+        let class_name = target.className;
+        let grand_parent = target.parentElement.parentElement;
+        if (class_name === "ingredient-text") {
+          grand_parent = grand_parent.parentElement;
+          try {
+            grand_parent.nextElementSibling.children[0].children[0].children[0].focus();
+          } catch {
+            window.console.log("no input below");
+            document.getElementById("instructions").focus();
+            window.console.log(document.getElementById("instructions"));
+          }
+        } else {
+          try {
+            grand_parent.nextElementSibling.children[0]
+              .querySelector("." + class_name)
+              .focus();
+          } catch (err) {
+            window.console.log("no input below");
+            document.getElementById("instructions").focus();
+            window.console.log(document.getElementById("instructions"));
+          }
+        }
+      } else if (keycode == 39) {
+        if (
+          target.className == "ingredient-text" &&
+          target.selectionEnd == target.value.length
+        )
+          target.parentElement.nextElementSibling.focus();
+        else if (
+          target.className == "quantity" &&
+          target.selectionEnd == target.value.length
+        )
+          target.nextElementSibling.focus();
+        else if (
+          target.className == "unit" &&
+          target.selectionEnd == target.value.length
+        ) {
+          try {
+            target.parentElement.parentElement.nextElementSibling.children[0].children[0].children[0].focus();
+          } catch (err) {
+            window.console.log(err);
+            document.getElementById("instructions").focus();
+          }
+        }
+        return;
+      } else if (keycode == 37) {
+        if (target.className == "ingredient-text" && target.selectionEnd == 0) {
+          try {
+            target.parentElement.parentElement.parentElement.previousElementSibling.children[0].children[2].focus();
+          } catch {
+            document.getElementById("extra-info").focus();
+          }
+        } else if (target.className == "quantity" && target.selectionEnd == 0)
+          target.previousElementSibling.children[0].focus();
+        else if (target.className == "unit" && target.selectionEnd == 0)
+          target.previousElementSibling.focus();
+        else if (target.id == "instructions" && target.selectionEnd == 0) {
+          window.console.log("asdfasdfasdf");
+          try {
+            let els = document
+              .getElementById("ingredients")
+              .querySelectorAll(".unit");
+            els[els.length - 1].focus();
+            document.getElementById("ingredients").querySelectorAll(".unit");
+            // els[els.length-1].selectLocation=els[els.length-1].value.length+1;
+            let el = els[els.length - 1];
+            window.console.log(el.selectionStart + "  " + el.selectionEnd);
+            // el.selectionStart = el.selectionEnd = el.value.length;
+            //     var range = el.createTextRange();
+            // range.collapse(false);
+            // range.select();
+          } catch (err) {
+            window.console.log(err);
+          }
+        }
+
+        return;
+      }
+    },
   },
   beforeMount() {
     // us objec to initialize all values

@@ -2,7 +2,7 @@
     <div>
         <input type="text" name="" id="name" v-model="inp">
         <div v-for="recipe in recipes" :key=recipe.key>
-            <div class="recipee" @click="$emit('openRecipe',recipe.path)" v-if="recipe.name.toLowerCase().indexOf(inp)!=-1"> {{ recipe.name }} </div>
+            <div class="recipee" @click="$emit('openRecipe',{path: recipe.path,event:$event})" v-if="recipe.name.toLowerCase().indexOf(inp)!=-1"> {{ recipe.name }} </div>
         </div>
     </div>
 </template>
