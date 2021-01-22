@@ -24,7 +24,7 @@
         {{ recipe.name }}
       </div>
     </div>
-    <div v-if="no_matches" id="no-recipe-match"> No recipes matched </div>
+    <div v-if="no_matches" id="no-recipe-match">No recipes matched</div>
   </div>
 </template>
 
@@ -33,7 +33,10 @@ export default {
   name: "RecipeSearch",
   data: function() {
     // get all recipes paths
-    const recipes_path = "../all_recipes";
+    const homedir = require("os").homedir();
+    window.console.log(homedir);
+    const recipes_path = homedir + "/desktop/all_recipes"; //"../all_recipes";
+
     var recursive = require("recursive-readdir");
     const that = this;
     var path = require("path");
@@ -63,53 +66,51 @@ export default {
       no_matches: false,
     };
   },
-  watch:{
-      inp: function(){
-          if( this.recipes.filter(recipe=> recipe.name.toLowerCase().indexOf(this.inp) != -1).length === 0) this.no_matches = true;
-          else{
-              this.no_matches = false;
-          }
+  watch: {
+    inp: function() {
+      if (
+        this.recipes.filter(
+          (recipe) => recipe.name.toLowerCase().indexOf(this.inp) != -1
+        ).length === 0
+      )
+        this.no_matches = true;
+      else {
+        this.no_matches = false;
       }
+    },
   },
 };
 </script>
 <style scoped>
-#no-recipe-match{
-    opacity: 0.7;
+#no-recipe-match {
+  opacity: 0.7;
 }
 .recipee:hover {
   cursor: pointer;
   text-decoration: underline;
 }
-.recipee{
-    width:300px;
-    margin-left: auto;
-    margin-right: auto;
-    padding-top: 1px;
-
+.recipee {
+  width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 1px;
 }
 #search-input {
-  margin-bottom:40px;
+  margin-bottom: 40px;
 }
 
-#search-input{
-    margin-left: auto;
-    margin-right: auto;
+#search-input {
+  margin-left: auto;
+  margin-right: auto;
 }
-
-
-
-
-
 
 .form__group {
   position: relative;
   padding: 15px 0 0;
   margin-top: 10px;
   width: 50%;
-  margin-left:auto;
-  margin-right:auto;
-
+  margin-left: auto;
+  margin-right: auto;
 }
 .form__field {
   font-family: inherit;
