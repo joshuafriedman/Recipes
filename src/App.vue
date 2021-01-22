@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" @keydown="handleKeyDown">
     <div v-if="is_path && !edit_recipe">
       <Recipe
         :path="path"
@@ -20,14 +20,15 @@
     <div v-else>
       <div class="flex-row">
         <div>
-          Open a recipe
-          <input type="file" @click="setNull" @change="updateFile" /> 
+          <!-- <label for="files" class="btn"> <button class="create-recipe"> Open a recipe file </button> </label> -->
+          <button class="create-recipe"> <label for="files" class="btn"> Open a recipe file </label> </button>
+          <input id="files" type="file" @click="setNull" @change="updateFile" style="visibility:hidden;" /> 
         </div>
         <div>
-          <button @click="createRecipe" id="create-recipe">Create new recipe</button>
+          <button @click="createRecipe" class="create-recipe">Create new recipe</button>
         </div>
         <div>
-          <button @click="getUpdate">Get Latest Updates</button>
+          <button @click="getUpdate" class="create-recipe">Get Latest Updates</button>
           <br />
           <br />
           <br />
@@ -41,8 +42,6 @@
         </div>
       </div>
       <br />
-      <br />
-      the search
       <RecipeSearch v-on:openRecipe="openTheRecipe" />
     </div>
   </div>
@@ -85,6 +84,9 @@ export default {
     }
   },
   methods: {
+    handleKeyDown: function(e){
+      if(e.keyCode == 13) document.getElementById("")
+    },
     openTheRecipe: function(e) {
       const cmd = e.event.metaKey;
       if (!cmd) {
@@ -255,10 +257,13 @@ export default {
   justify-content: center;
   width: 100%;
 }
-#create-recipe{
+.create-recipe{
   font-size: 16px;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   width: 100px;
-  border-radius: 5px;
+  /* border-radius: 5px; */
+}
+.flex-row>div{
+width: 320px;
 }
 </style>
