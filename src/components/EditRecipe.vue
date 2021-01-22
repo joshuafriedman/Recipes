@@ -67,8 +67,9 @@ export default {
   },
   methods: {
     addIngredient: function(){
+      this.ing_counter+=1;
         this.ingredients.push(["","","g",this.ing_counter]);
-        this.ing_counter+=1;
+        
     },
     selectLocation: function(){
             // document.getElementById("file-location").click();

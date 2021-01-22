@@ -158,9 +158,7 @@ export default {
         );
         return;
       }
-      window.console.log("jmmmm");
       fs.writeFile(full_file_name, json_obj, (err) => {
-        window.console.log("lolol");
         if (err) throw err;
         else {
           window.console.log("recipe saved");
@@ -182,7 +180,7 @@ export default {
     },
     exit: function() {
       // are you sure wyou want to exit?
-      if (confirm("Exit  create page? All progress will be lost.")) {
+      if (confirm("Exit create page? All progress will be lost.")) {
         this.$emit("exit");
       }
     },
