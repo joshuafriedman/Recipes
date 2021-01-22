@@ -20,8 +20,8 @@ protocol.registerSchemesAsPrivileged([
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 960,
-    height: 720,
+    width: 1060,
+    height: 820,
     tabbingIdentifier: "wooow",
     webPreferences: {
       nodeIntegration: true,

@@ -7,9 +7,9 @@
     <div id="ingredients">
       <div class="ingredient-container seperate nohover">
         <div class="ingredient">
-          <div class="ingredient-text down">Ingredient Name</div>
+          <div class="ingredient-text" :class="{ 'down': variable_quantities.length!=0, 'up':variable_quantities.length==0 }" >Ingredient Name</div>
         </div>
-        <div class="quantity down">Single Quantity</div>
+        <div class="quantity" :class="{ 'down': variable_quantities.length!=0 , 'up':variable_quantities.length==0}" >Single Quantity</div>
         <!-- <div class ="quantity"> -->
           <!-- Variable Quantity
           <input
@@ -454,6 +454,10 @@ export default {
 .down {
   position: relative;
   bottom: -20px;
+}
+.up{
+  position: relative;
+  bottom: 20px;
 }
 .hide-box {
   border: none;
