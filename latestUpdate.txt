@@ -2,7 +2,4 @@ writeee the latest update for aaron in this line startingg from line 2: $
 Hey Aaron,
 
 New features include:
-    New recipe search
-    Printing and a prettier format for printing
-    Add multiple "variable quantity" columns when viewing a recipe
-    Easier moving around when creating and editing recipe (using enter)
+    Customizable printing page!

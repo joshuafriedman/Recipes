@@ -1,6 +1,6 @@
 "use strict";
 
-import { app, protocol, BrowserWindow, Menu, webContents } from "electron";
+import { app, protocol, BrowserWindow, Menu } from "electron";
 import {
   createProtocol,
   /* installVueDevtools */
@@ -43,10 +43,6 @@ function createWindow() {
     createProtocol("app");
     // Load the index.html when not in development
     win.loadURL("app://./index.html");
-
-    win.on('testinga',(event)=>{
-      console.log("make you feel great!")
-    })
   }
 
   custom = "";
