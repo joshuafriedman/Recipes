@@ -11,6 +11,7 @@
       <edit-recipe
         :objec="obj"
         v-on:recipe-edited="recipeEdited"
+        v-on:recipe-copied="recipeCopied"
         v-on:exit="goBackToRecipe"
       />
     </div>
@@ -116,10 +117,14 @@ export default {
     recipeEdited: function() {
       this.edit_recipe = false;
     },
+    recipeCopied: function(obj) {
+      this.path = obj.path
+      this.edit_recipe = false;
+    },
     goBackToRecipe: function() {
       this.edit_recipe = false;
     },
-    changeTitle: function(new_title) {
+    changeTitle: function(new_title) { // Window/Tab's title
       window.console.log(document.getElementsByTagName("title"));
       window.console.log(
         document

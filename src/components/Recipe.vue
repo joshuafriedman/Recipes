@@ -2,6 +2,7 @@
   <div id="main">
     <div v-if="edit" id="go-back" @click="goBack">&larr;</div>
     <div v-if="edit" id="edit" @click="editRecipe">Edit</div>
+    <div v-if="edit" id="copy" @click="copyRecipe">Copy</div>
     <span id="name" @click="toggleViewMode">{{ name }}</span>
     <span id="extra-info">{{ extra_info }}</span> <span id="afp">AFP</span>
     <div id="ingredients">
@@ -10,19 +11,6 @@
           <div class="ingredient-text" :class="{ 'down': variable_quantities.length!=0, 'up':variable_quantities.length==0 }" >Ingredient Name</div>
         </div>
         <div class="quantity" :class="{ 'down': variable_quantities.length!=0 , 'up':variable_quantities.length==0}" >Single Quantity</div>
-        <!-- <div class ="quantity"> -->
-          <!-- Variable Quantity
-          <input
-            type="number"
-            name=""
-            id="numberr"
-            @change="updateQuantity"
-            style="width:60px;font-size:16px;"
-            placeholder=""
-            v-model="quantity"
-            :class="{ 'hide-box': !edit }"
-          />
-        </div> -->
         <div v-for="(quant,index) in variable_quantities" :key="quant.key" >
           <div class="quantity">
           Variable Quantity
@@ -198,6 +186,9 @@ export default {
     },
     editRecipe: function() {
       this.$emit("edit-recipe", this.obj);
+    },
+    copyRecipe: function() {
+      this.$emit("edit-recipe", {...this.obj, copy:true});
     },
     toggleViewMode: function() {
       // switch view between edit and print

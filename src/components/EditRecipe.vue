@@ -14,18 +14,6 @@
         </div>
         <div class="quantity" style="padding-left:45px;">Quantity</div>
         <div class="remove-ingredient" style="width:50px;">&nbsp;</div>
-        <!-- <div class="quantity"> 
-            Variable Quantity
-                <input
-      type="number"
-      name=""
-      id="numberr"
-      @change="updateQuantity"
-      @keyup="updateQuantity"
-      style="width:60px;"
-      placeholder="0"
-    />
-             </div> -->
       </div>
       <div v-for="ingredient in ingredients" :key="ingredient.id">
         <div class="ingredient-container hover-effect">
@@ -63,6 +51,8 @@ export default {
       ing_counter: 4,
       path: "",
       var_text:"Choose Location",
+      directory: "",
+      copy: false,
     };
   },
   methods: {
@@ -80,7 +70,7 @@ export default {
             defaultPath: "~/Desktop"
             }).then((prom)=>{
                 window.console.log(prom.filePaths,prom.canceled);
-                if(!prom.canceled) this.path = prom.filePaths[0];
+                if(!prom.canceled) this.directory = prom.filePaths[0];
             }));
             this.var_text = "Submit";            
             return;
@@ -94,7 +84,7 @@ export default {
             alert("please choose a name for your recipe");
             return;
         }
-        if(this.path==""){
+        if(this.directory==""){
             alert(" Please choose a location for your recipe");
             return;
         }
@@ -102,21 +92,24 @@ export default {
         const ingredients = this.ingredients.filter((val)=>{return val[0]!=""}).map((val)=>{return [val[0],val[1]+val[2]]});
         const obj = {name: this.name,instructions: this.instructions, extra_info: this.extra_info,ingredients};
         window.console.log('well hello');
-        window.console.log(this.path);
         window.console.log(obj);
         const json_obj = JSON.stringify(obj);
         window.console.log(json_obj);
         // save file
         var fs = require("fs");
+        this.path  = this.directory + "/"+this.name+".JSHN";
+        window.console.log('saving to', this.path);
         const full_file_name = this.path;
-        window.console.log('jmmmm');
         fs.writeFile(full_file_name,json_obj,(err)=>{
             window.console.log('lolol');
             if(err) throw err;
             else{
                 window.console.log('recipe saved');
                 obj.path = full_file_name;
-                this.$emit("recipe-edited",obj);
+                if(this.copy)this.$emit("recipe-copied",obj);
+                else{
+                  this.$emit("recipe-edited",obj);
+                }
             }
         })
 
@@ -327,12 +320,15 @@ export default {
     },
   },
   beforeMount() {
+    const path = require("path");
     // us objec to initialize all values
     const obj = this.objec;
     this.name = obj.name;
     this.instructions = obj.instructions;
     this.extra_info = obj.extra_info;
     this.path = obj.path;
+    this.directory = path.dirname(obj.path)
+    this.copy = obj.copy;
     this.ingredients = obj.ingredients.map((val)=>{
       if(val[1].charAt(val[1].length-1)=="g"){
         this.ing_counter+=1;
@@ -343,17 +339,19 @@ export default {
         return [val[0],val[1].substring(0,val[1].length-3),"ind",this.ing_counter]
       }
       });
+    if(obj.copy){
+      this.name+=" copy"
+    }
+    window.console.log('here is everythign', this);
+
   },
   computed:{
       shortened_path: function(){
-        //   var path = require("path");
-        //   window.console.log(path.parse(this.path));
-          var parts = this.path.split("/");
-        //   window.console.log(parts);
+        var parts = this.directory.split("/");
         window.console.log(parts);
         parts.splice(0,4);
-            var short = parts.join("/");
-          return short;
+        var short = parts.join("/") + "/";
+        return short;
       }
   }
 };

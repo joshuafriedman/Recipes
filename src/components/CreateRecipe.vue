@@ -372,38 +372,6 @@ export default {
       }
     },
   },
-  beforeMount() {
-    // read file
-    // const fs = require("fs");
-    // fs.readFile(this.path, (err, data) => {
-    //   if (err) throw err;
-    //   data = data.toString();
-    //   window.console.log(data);
-    //   const obj = JSON.parse(data);
-    //   window.console.log(obj);
-    //   this.obj = obj;
-    //   this.name = obj.name;
-    //   this.instructions = obj.instructions;
-    //   this.ingredients = obj.ingredients;
-    //   this.extra_info = obj.extra_info;
-    //   //total weight
-    //   var total_weight = 0;
-    //   var str = "";
-    //   for (const ing of obj.ingredients) {
-    //     if (ing[1].indexOf("ind") != -1) {
-    //       if (str === "") str = " + ";
-    //       str += "?";
-    //       continue;
-    //     }
-    //     let weight = ing[1].replace("g", "");
-    //     weight = Number(weight);
-    //     total_weight += weight;
-    //   }
-    //   this.total_weight = "" + total_weight + "g" + str;
-    //   var num = total_weight * 0.9;
-    //   this.sub_total_weight = "" + num.toFixed(2) + "g" + str;
-    // });
-  },
   computed: {
     shortened_path: function() {
       //   var path = require("path");
