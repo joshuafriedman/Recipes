@@ -53,6 +53,7 @@ export default {
       var_text:"Choose Location",
       directory: "",
       copy: false,
+      original_path: "",
     };
   },
   methods: {
@@ -100,9 +101,17 @@ export default {
         this.path  = this.directory + "/"+this.name+".JSHN";
         window.console.log('saving to', this.path);
         const full_file_name = this.path;
-        fs.writeFile(full_file_name,json_obj,(err)=>{
+        const flag = !this.copy && this.original_path === full_file_name ? {} : { flag: "wx" };
+        fs.writeFile(full_file_name,json_obj,flag,(err)=>{
             window.console.log('lolol');
-            if(err) throw err;
+            if(err){
+              err = err.toString()
+              console.log(err);
+              if(err.indexOf("file already exists")!=-1) alert(`File with name "${obj.name}" in folder "${this.shortened_path}" already exists`)
+              else{
+                throw err;
+              }
+            }
             else{
                 window.console.log('recipe saved');
                 obj.path = full_file_name;
@@ -327,6 +336,7 @@ export default {
     this.instructions = obj.instructions;
     this.extra_info = obj.extra_info;
     this.path = obj.path;
+    this.original_path = obj.path;
     this.directory = path.dirname(obj.path)
     this.copy = obj.copy;
     this.ingredients = obj.ingredients.map((val)=>{

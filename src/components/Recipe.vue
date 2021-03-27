@@ -438,6 +438,12 @@ export default {
   right: 25px;
   cursor: pointer;
 }
+#copy {
+  position: absolute;
+  top: 45px;
+  right: 25px;
+  cursor: pointer;
+}
 .alternate {
   background-color: rgb(244, 244, 244);
   -webkit-print-color-adjust: exact;

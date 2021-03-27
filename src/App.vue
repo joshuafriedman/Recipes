@@ -114,7 +114,8 @@ export default {
       this.obj = obj;
       this.obj.path = this.path;
     },
-    recipeEdited: function() {
+    recipeEdited: function(obj) {
+      this.path = obj.path
       this.edit_recipe = false;
     },
     recipeCopied: function(obj) {
