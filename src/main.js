@@ -29,6 +29,11 @@ if (process.cwd() === "/") {
 
 Vue.config.productionTip = false
 
+import VModal from 'vue-js-modal'
+Vue.use(VModal);
+
+
+
 new Vue({
   render: h => h(App),
 }).$mount('#app')

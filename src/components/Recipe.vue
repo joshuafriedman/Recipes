@@ -4,26 +4,45 @@
     <div v-if="edit" id="edit" @click="editRecipe">Edit</div>
     <div v-if="edit" id="copy" @click="copyRecipe">Copy</div>
     <span id="name" @click="toggleViewMode">{{ name }}</span>
+    <img src="../assets/pictures.png" id="images" class="icon" @click="showImages" v-if="edit">
+    <img src="../assets/notes.png" id="notes" class="icon" @click="showNotes" v-if="edit">
+        <modal name="example">This is an example</modal>
     <span id="extra-info">{{ extra_info }}</span> <span id="afp">AFP</span>
     <div id="ingredients">
       <div class="ingredient-container seperate nohover">
         <div class="ingredient">
-          <div class="ingredient-text" :class="{ 'down': variable_quantities.length!=0, 'up':variable_quantities.length==0 }" >Ingredient Name</div>
+          <div
+            class="ingredient-text"
+            :class="{
+              down: variable_quantities.length != 0,
+              up: variable_quantities.length == 0,
+            }"
+          >
+            Ingredient Name
+          </div>
         </div>
-        <div class="quantity" :class="{ 'down': variable_quantities.length!=0 , 'up':variable_quantities.length==0}" >Single Quantity</div>
-        <div v-for="(quant,index) in variable_quantities" :key="quant.key" >
+        <div
+          class="quantity"
+          :class="{
+            down: variable_quantities.length != 0,
+            up: variable_quantities.length == 0,
+          }"
+        >
+          Single Quantity
+        </div>
+        <div v-for="(quant, index) in variable_quantities" :key="quant.key">
           <div class="quantity">
-          Variable Quantity
-          <input
-            type="number"
-            name=""
-            id="numberr"
-            style="width:60px;font-size:16px;"
-            placeholder=""
-            v-model="variable_quantities[index]"
-            :class="{ 'hide-box': !edit }"
-          />
-        </div>
+            Variable Quantity
+            <input
+              type="number"
+              name=""
+              id="numberr"
+              style="width:60px;font-size:16px;"
+              placeholder=""
+              v-model="variable_quantities[index]"
+              :class="{ 'hide-box': !edit }"
+            />
+          </div>
         </div>
 
         <button v-if="edit" class="del-variable-quantity" @click="delCol">
@@ -34,8 +53,6 @@
         </button>
       </div>
 
-      
-
       <div v-for="(ingredient, index) in ingredients" :key="ingredient.id">
         <div
           class="ingredient-container hover-effect"
@@ -45,10 +62,8 @@
             <div class="ingredient-text">{{ ingredient[0] }}</div>
           </div>
           <div class="quantity">{{ ingredient[1] }}</div>
-          <div v-for="(quant) in variable_quantities" :key="quant.id">
-
-          <div class="quantity">{{ ingQuant(quant, ingredient[1]) }}</div>
-
+          <div v-for="quant in variable_quantities" :key="quant.id">
+            <div class="quantity">{{ ingQuant(quant, ingredient[1]) }}</div>
           </div>
         </div>
       </div>
@@ -59,19 +74,16 @@
         <div class="quantity">{{ total_weight }}</div>
         <!-- <div class="quantity">{{ ingQuant(quantity, total_weight) }}</div> -->
 
-        <div v-for="(weight,index) in variable_weights" :key="weight.id">
-
-        <input
-          :class="{ 'hide-box': !edit }"
-          class="quantity"
-          id="total_var_weight"
-          type="text"
-          v-model="variable_weights[index]"
-          style="text-align:center; font-size:16px;"
-        />
-
-      </div>
-
+        <div v-for="(weight, index) in variable_weights" :key="weight.id">
+          <input
+            :class="{ 'hide-box': !edit }"
+            class="quantity"
+            id="total_var_weight"
+            type="text"
+            v-model="variable_weights[index]"
+            style="text-align:center; font-size:16px;"
+          />
+        </div>
       </div>
       <div class="ingredient-container hover-effect" style="font-weight:500;">
         <div class="ingredient">
@@ -90,14 +102,10 @@
         <div class="quantity">{{ ingQuant(1, sub_total_weight) }}</div>
         <!-- <div class="quantity">{{ ingQuant(quantity, sub_total_weight) }}</div> -->
 
-        <div v-for="(weight) in variable_weights" :key="weight.id">
+        <div v-for="weight in variable_weights" :key="weight.id">
           <div class="quantity">{{ ingQuant(percentage, weight) }}</div>
         </div>
-
       </div>
-
-      
-
     </div>
     <div id="instructions-container">
       <div id="instructions">
@@ -110,6 +118,7 @@
 </template>
 
 <script>
+
 export default {
   name: "Recipe",
   props: {
@@ -188,7 +197,7 @@ export default {
       this.$emit("edit-recipe", this.obj);
     },
     copyRecipe: function() {
-      this.$emit("edit-recipe", {...this.obj, copy:true});
+      this.$emit("edit-recipe", { ...this.obj, copy: true });
     },
     toggleViewMode: function() {
       // switch view between edit and print
@@ -199,9 +208,22 @@ export default {
       this.variable_weights.push("0g");
     },
     delCol: function() {
-      this.variable_quantities = this.variable_quantities.slice(0,this.variable_quantities.length-1);
-      this.variable_weights = this.variable_weights.slice(0,this.variable_weights.length-1);
+      this.variable_quantities = this.variable_quantities.slice(
+        0,
+        this.variable_quantities.length - 1
+      );
+      this.variable_weights = this.variable_weights.slice(
+        0,
+        this.variable_weights.length - 1
+      );
     },
+    showImages: function(){
+      //show popup
+    },
+    showNotes: function(){
+      //show popup
+      this.$modal.show('example')
+    }
   },
   beforeMount() {
     // read file
@@ -236,6 +258,7 @@ export default {
       this.sub_total_weight = "" + num.toFixed(2) + "g" + str;
       // this.total_variable_weight = this.ingQuant(this.quantity,total_weight);
       this.total_variable_weight = "0g";
+      console.log("ingredients ", obj.ingredients)
     });
   },
   beforeUpdate() {
@@ -259,16 +282,14 @@ export default {
     variable_quantities: {
       deep: true,
       handler: function(new_val) {
-
         if (!this.switch) {
-        this.switch = true;
-        return;
-      }
-      this.switch = false;
-      this.variable_weights = this.variable_quantities.map( val => this.ingQuant(
-        val,
-        this.total_weight
-      ));
+          this.switch = true;
+          return;
+        }
+        this.switch = false;
+        this.variable_weights = this.variable_quantities.map((val) =>
+          this.ingQuant(val, this.total_weight)
+        );
 
         window.console.log("watch_var_quants", this.total_weight);
         window.console.log(new_val);
@@ -277,39 +298,40 @@ export default {
     variable_weights: {
       deep: true,
       handler: function(new_val) {
-
         if (!this.switch) {
-        this.switch = true;
-        return;
-      }
+          this.switch = true;
+          return;
+        }
 
-      this.switch = false;
-      for (let i = 0; i < new_val.length; i++) {
-        
-      let total_weight = this.total_weight.replace(" + ?", "");
-      window.console.log("here is the total weight: " + total_weight);
-      window.console.log("total var weight: " + this.total_variable_weight);
-      window.console.log(
-        "total var weight: " + document.getElementById("total_var_weight").value
-      );
+        this.switch = false;
+        for (let i = 0; i < new_val.length; i++) {
+          let total_weight = this.total_weight.replace(" + ?", "");
+          window.console.log("here is the total weight: " + total_weight);
+          window.console.log("total var weight: " + this.total_variable_weight);
+          window.console.log(
+            "total var weight: " +
+              document.getElementById("total_var_weight").value
+          );
 
-      var index = total_weight.indexOf("ind") == -1 ? -2 : -4;
+          var index = total_weight.indexOf("ind") == -1 ? -2 : -4;
 
-      window.console.log(
-        "yes ysesdfahsfkjjsdfhakj fajsdfhlakjshflka jsdflkajsdfkajsdfkjasdfkjadlsfkjh"
-      );
-      this.variable_quantities[i] = this.rounder(
-        Number(new_val[i].replace("g", "").replace("ind", "")) /
-          Number(total_weight.slice(0, index + 1))
-      );
-      window.console.log(total_weight.slice(0, index + 1));
-      window.console.log(Number(total_weight.slice(0, index + 1)) + "   aa");
-      window.console.log(
-        "watch total_variable_weight has been called" + this.quantity
-      );
-      }
+          window.console.log(
+            "yes ysesdfahsfkjjsdfhakj fajsdfhlakjshflka jsdflkajsdfkajsdfkjasdfkjadlsfkjh"
+          );
+          this.variable_quantities[i] = this.rounder(
+            Number(new_val[i].replace("g", "").replace("ind", "")) /
+              Number(total_weight.slice(0, index + 1))
+          );
+          window.console.log(total_weight.slice(0, index + 1));
+          window.console.log(
+            Number(total_weight.slice(0, index + 1)) + "   aa"
+          );
+          window.console.log(
+            "watch total_variable_weight has been called" + this.quantity
+          );
+        }
 
-        this.variable_quantities = [...this.variable_quantities]
+        this.variable_quantities = [...this.variable_quantities];
         window.console.log("watch_var_weights");
       },
     },
@@ -403,6 +425,7 @@ export default {
 
 #name {
   font-size: 24px;
+  /* text-shadow: 0  10px 10px grey; */
 }
 
 #name:hover {
@@ -452,7 +475,7 @@ export default {
   position: relative;
   bottom: -20px;
 }
-.up{
+.up {
   position: relative;
   bottom: 20px;
 }
@@ -464,18 +487,33 @@ export default {
   border-radius: 15px;
   background-color: rgb(228, 222, 222);
   cursor: pointer;
-  height:30px;
+  height: 30px;
   position: absolute;
-  right:100px;
+  right: 100px;
 }
 .del-variable-quantity {
   font-size: 20px;
   border-radius: 15px;
   background-color: rgb(228, 222, 222);
   cursor: pointer;
-  height:30px;
+  height: 30px;
   position: absolute;
-  right:130px;
+  right: 130px;
   width: 30px;
+}
+.icon{
+    width: 25px;
+  height: 25px;
+  cursor: pointer;
+  /* box-shadow: 0 5px 6px rgb(196, 196, 196); */
+  border-radius: 5px;
+  margin-left: 10px;
+  background-color: transparent;
+  mix-blend-mode: multiply;
+}
+
+#images:active{
+  transition: 0.2s;
+  box-shadow: 0 0px 6px rgb(196, 196, 196);
 }
 </style>

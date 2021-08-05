@@ -1,5 +1,5 @@
 {
-  "name": "tuggle",
+  "name": "recipes",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -19,7 +19,8 @@
     "electron": "^8.1.0",
     "recursive-readdir": "^2.2.2",
     "vue": "^2.6.11",
-    "vue-electron": "^1.0.6"
+    "vue-electron": "^1.0.6",
+    "vue-js-modal": "^2.0.0-rc.6"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.2.0",
@@ -29,6 +30,7 @@
     "electron": "^6.0.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.1.2",
+    "fslightbox-vue": "^1.2.0",
     "vue-cli-plugin-electron-builder": "^1.4.6",
     "vue-template-compiler": "^2.6.11"
   },

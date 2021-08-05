@@ -146,7 +146,7 @@ export default {
     path: function() {
       //update the title
       var path = require("path");
-      let new_path = this.path == "" ? "Tuggle     " : path.basename(this.path);
+      let new_path = this.path == "" ? "Recipes     " : path.basename(this.path);
       this.changeTitle(new_path.substring(0, new_path.length - 5));
     },
   },
@@ -160,7 +160,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 70px;
 }
 .flex-row {
   display: flex;

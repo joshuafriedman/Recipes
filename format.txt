@@ -1,0 +1,10 @@
+recpie format:
+    from json file
+        {
+            name: String,
+            extra_info: String,
+            ingredients: Array([String, String]), //[name, quantity]
+            instructions: String,
+            notes: String,
+            images: Array(String) ? // array of images
+        } 
