@@ -1,4 +1,4 @@
-# tuggle
+# recipes
 
 ## Project setup
 ```
