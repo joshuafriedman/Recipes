@@ -236,7 +236,8 @@ const template = [
         label: "print",
         accelerator: "Cmd+P",
         click() {
-          win.webContents.print(options, (success, errorType) => {
+          let windd = BrowserWindow.getFocusedWindow();
+          windd.webContents.print(options, (success, errorType) => {
             if (!success) console.log(errorType);
           });
         },
