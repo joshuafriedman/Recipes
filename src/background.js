@@ -237,8 +237,11 @@ const template = [
         accelerator: "Cmd+P",
         click() {
           let windd = BrowserWindow.getFocusedWindow();
+          // windd.webContents.insertCSS("#app {zoom: 0.7}")
+
           windd.webContents.print(options, (success, errorType) => {
             if (!success) console.log(errorType);
+            // windd.webContents.insertCSS("#app {zoom: normal}")
           });
         },
       },

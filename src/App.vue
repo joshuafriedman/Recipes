@@ -1,5 +1,7 @@
 <template>
-  <div id="app" @keydown="handleKeyDown">
+  <div id="app" @keydown="handleKeyDown" class="grid-container">
+      <Sidebar />
+    <div id="main">
     <div v-if="is_path && !edit_recipe">
       <Recipe
         :path="path"
@@ -32,6 +34,8 @@
       <br />
       <RecipeSearch v-on:openRecipe="openTheRecipe" />
     </div>
+</div>
+
   </div>
 </template>
 
@@ -40,6 +44,7 @@ import Recipe from "./components/Recipe.vue";
 import RecipeSearch from "./components/RecipeSearch.vue";
 import CreateRecipe from "./components/CreateRecipe";
 import EditRecipe from "./components/EditRecipe";
+import Sidebar from "./components/Sidebar.vue";
 
 export default {
   name: "App",
@@ -48,6 +53,7 @@ export default {
     RecipeSearch,
     CreateRecipe,
     EditRecipe,
+    Sidebar,
   },
   data: function() {
     return {
@@ -162,6 +168,12 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+.grid-container{
+  display: grid;
+  grid-template-areas:'sidebar main';
+  grid-gap: 10px;
+}
+
 .flex-row {
   display: flex;
   flex-direction: row;
@@ -177,4 +189,11 @@ export default {
 .flex-row>div{
 width: 320px;
 }
+#main{
+  grid-area: main;
+}
+#sidebar{
+  grid-area: sidebar;
+}
+
 </style>
