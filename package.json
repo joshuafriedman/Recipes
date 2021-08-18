@@ -18,6 +18,7 @@
     "core-js": "^3.6.4",
     "electron": "^8.1.0",
     "recursive-readdir": "^2.2.2",
+    "update-electron-app": "^2.0.1",
     "vue": "^2.6.11",
     "vue-electron": "^1.0.6"
   },
