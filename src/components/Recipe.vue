@@ -1,19 +1,20 @@
 <template>
   <div id="main">
     <div v-if="edit" id="go-back" @click="goBack">&larr;</div>
-    <div v-if="edit" id="edit" @click="editRecipe">Edit</div>
     <div v-if="edit" id="copy" @click="copyRecipe">Copy</div>
+    <div v-if="edit" id="edit" @click="editRecipe">Edit</div>
+    <div v-if="edit" id="language" @click="toggleLanguage">{{ this.language.substring(0,2).toUpperCase() }}</div>
     <span id="name" @click="toggleViewMode">{{ name }}</span>
     <span id="extra-info">{{ extra_info }}</span> <span id="afp">AFP</span>
     <div id="ingredients">
       <div class="ingredient-container seperate nohover">
         <div class="ingredient">
-          <div class="ingredient-text" :class="{ 'down': variable_quantities.length!=0, 'up':variable_quantities.length==0 }" >Ingredient Name</div>
+          <div class="ingredient-text" :class="{ 'down': variable_quantities.length!=0, 'up':variable_quantities.length==0 }" >Ingredient</div>
         </div>
-        <div class="quantity" :class="{ 'down': variable_quantities.length!=0 , 'up':variable_quantities.length==0}" >Single Quantity</div>
+        <div class="quantity" :class="{ 'down': variable_quantities.length!=0 && language != 'french' , 'up':variable_quantities.length==0,}" >{{ language=="english"? "Single Quantity" : "Une Quantité" }}</div>
         <div v-for="(quant,index) in variable_quantities" :key="quant.key" >
           <div class="quantity">
-          Variable Quantity
+          {{ language=="english"? "Variable Quantity" : "Quantité" }}
           <input
             type="number"
             name=""
@@ -133,6 +134,7 @@ export default {
       edit: true, // view/print mode,
       variable_quantities: [0],
       variable_weights: ["0g"],
+      language: "english",
     };
   },
   methods: {
@@ -201,6 +203,22 @@ export default {
     delCol: function() {
       this.variable_quantities = this.variable_quantities.slice(0,this.variable_quantities.length-1);
       this.variable_weights = this.variable_weights.slice(0,this.variable_weights.length-1);
+    },
+    toggleLanguage: function() {
+      //check if french or english
+      if(this.language == "english"){
+        this.ingredients = this.obj.ingredients.map((val) => [val[2],val[1]])
+        this.instructions = this.obj.french?.instructions ?? ""
+        this.name = this.obj.french?.name ?? this.name
+        this.language = "french"
+      }
+      else if(this.language == "french"){
+        this.instructions = this.obj.instructions
+        this.ingredients = this.obj.ingredients
+        this.name = this.obj.name
+        this.language = 'english'
+      }
+
     },
   },
   beforeMount() {
@@ -434,13 +452,19 @@ export default {
 }
 #edit {
   position: absolute;
-  top: 25px;
-  right: 25px;
+  top: 15px;
+  right: 57px;
   cursor: pointer;
 }
 #copy {
   position: absolute;
-  top: 45px;
+  top: 15px;
+  right: 95px;
+  cursor: pointer;
+}
+#language {
+  position: absolute;
+  top: 15px;
   right: 25px;
   cursor: pointer;
 }
@@ -466,7 +490,8 @@ export default {
   cursor: pointer;
   height:30px;
   position: absolute;
-  right:100px;
+  right:80px;
+  width: 30px;
 }
 .del-variable-quantity {
   font-size: 20px;
@@ -475,7 +500,8 @@ export default {
   cursor: pointer;
   height:30px;
   position: absolute;
-  right:130px;
+  right:110px;
   width: 30px;
+  margin-right:5px;
 }
 </style>

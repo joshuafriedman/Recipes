@@ -3,22 +3,28 @@
     <input type="text" id="name" placeholder="Recipe Name" v-model="name">
     <input type="text" id="extra-info" v-model="extra_info"> <span id="afp"><button @click="submit" class="submit">Submit</button></span>
     <button @click="selectLocation" class="submit" id="select-location">Choose location</button> <div id="short-path">{{shortened_path}}</div>
+    <br>
+    <span style="visibility: hidden;">(français)</span> <input type="text" id="name" placeholder="Recipe Name" v-model="french_name"> (français)
     <!-- <input type="file" webkitdirectory directory name="file" id="file-location" style="display:none" @click="setNull" @change="updateFile"> -->
     <div id="exit" @click="exit">Exit</div>
     <div id="ingredients">
         
-             <div class="ingredient-container seperate nohover" style="margin-right:0px;">
-        <button id="add-ingredient" @click="addIngredient">+</button><div class="ingredient">
-
-          <div class="ingredient-text" style="padding-left:10px;">Ingredient Name</div>
+      <div class="ingredient-container seperate nohover" style="margin-right:0px;">
+        <button id="add-ingredient" @click="addIngredient">+</button>
+        <div class="ingredient">
+          <div class="ingredient-text" style="padding-left:10px;">Ingredient</div>
         </div>
+          <div class="ingredient-text" style="padding-left:10px;">Ingredient (français) </div>
         <div class="quantity" style="padding-left:45px;">Quantity</div>
         <div class="remove-ingredient" style="width:50px;">&nbsp;</div>
       </div>
-      <div v-for="ingredient in ingredients" :key="ingredient.id">
+      <div v-for="(ingredient) in ingredients" :key="ingredient.id">
         <div class="ingredient-container hover-effect">
           <div class="ingredient">
             <input type="text" class="ingredient-text" placeholder="Ingredient name" v-model="ingredient[0]">
+          </div>
+          <div class="ingredient">
+            <input type="text" class="ingredient-text" placeholder="Ingredient name" v-model="ingredient[4]">
           </div>
           <input type="text" class="quantity" placeholder="qty" v-model="ingredient[1]">
           <input type="text" class="unit" v-model="ingredient[2]">
@@ -28,9 +34,15 @@
       </div>
     </div>
     <div id="instructions-container">
-           <h3> Instructions</h3>
-        <textarea id="instructions" rows="20" cols="100" v-model="instructions"></textarea>
-        
+           <div>
+             <h3> Instructions</h3>
+                     <textarea id="instructions" class="instructions" rows="20" cols="80" v-model="instructions"></textarea>
+           </div>
+
+        <div>
+          <h3> Instructions (Français)</h3>
+          <textarea id="french_instructions" class="instructions" rows="20" cols="80" v-model="french_instructions"></textarea>
+        </div>
     </div>
   </div>
 </template>
@@ -45,8 +57,10 @@ export default {
     return {
       obj: null, // is object containing dessert info
       name: "",
+      french_name: "",
       ingredients: [["","","g",1],["","","g",2],["","","g",3]],
       instructions: "",
+      french_instructions: "",
       extra_info: "",
       ing_counter: 4,
       path: "",
@@ -90,8 +104,8 @@ export default {
             return;
         }
 
-        const ingredients = this.ingredients.filter((val)=>{return val[0]!=""}).map((val)=>{return [val[0],val[1]+val[2]]});
-        const obj = {name: this.name,instructions: this.instructions, extra_info: this.extra_info,ingredients};
+        const ingredients = this.ingredients.filter((val)=>{return val[0]!=""}).map((val)=>{return [val[0],val[1]+val[2],val[4]]});
+        const obj = {name: this.name,instructions: this.instructions, extra_info: this.extra_info,ingredients, french:{name:this.french_name,instructions: this.french_instructions}};
         window.console.log('well hello');
         window.console.log(obj);
         const json_obj = JSON.stringify(obj);
@@ -230,7 +244,8 @@ export default {
         if (class_name === "ingredient-text") {
           grand_parent = grand_parent.parentElement;
           try {
-            grand_parent.previousElementSibling.children[0].children[0].children[0].focus();
+            const jump = target.parentElement.nextElementSibling.className == "ingredient" ? 0 : 1;
+            grand_parent.previousElementSibling.children[0].children[jump].children[0].focus();
           } catch {
             window.console.log("no input above");
             document.getElementById("name").focus();
@@ -253,7 +268,8 @@ export default {
         if (class_name === "ingredient-text") {
           grand_parent = grand_parent.parentElement;
           try {
-            grand_parent.nextElementSibling.children[0].children[0].children[0].focus();
+            const jump = target.parentElement.nextElementSibling.className == "ingredient" ? 0 : 1;
+            grand_parent.nextElementSibling.children[0].children[jump].children[0].focus();
           } catch {
             window.console.log("no input below");
             document.getElementById("instructions").focus();
@@ -271,11 +287,13 @@ export default {
           }
         }
       } else if (keycode == 39) {
+        window.console.log(target.selectionEnd);
+        if(target.selectionEnd == target.value.length) evt.preventDefault()
         if (
           target.className == "ingredient-text" &&
           target.selectionEnd == target.value.length
         )
-          target.parentElement.nextElementSibling.focus();
+          target.parentElement.nextElementSibling?.focus() || target.parentElement.nextElementSibling.children[0]?.focus();
         else if (
           target.className == "quantity" &&
           target.selectionEnd == target.value.length
@@ -294,9 +312,14 @@ export default {
         }
         return;
       } else if (keycode == 37) {
+        if(target.selectionEnd == 0) evt.preventDefault()
         if (target.className == "ingredient-text" && target.selectionEnd == 0) {
           try {
-            target.parentElement.parentElement.parentElement.previousElementSibling.children[0].children[2].focus();
+            if (target.parentElement.nextElementSibling?.children[0]?.className == "ingredient-text") target.parentElement.parentElement.parentElement.previousElementSibling.children[0].children[3].focus()
+            else{
+              target.parentElement.previousElementSibling.children[0].focus()
+            }
+            // target.parentElement.previousElementSibling.children[0].focus() || target.parentElement.parentElement.parentElement.previousElementSibling.children[0].children[2].focus();
           } catch {
             document.getElementById("extra-info").focus();
           }
@@ -333,7 +356,9 @@ export default {
     // us objec to initialize all values
     const obj = this.objec;
     this.name = obj.name;
+    this.french_name = obj.french?.name ?? "";
     this.instructions = obj.instructions;
+    this.french_instructions = obj.french?.instructions ?? "";
     this.extra_info = obj.extra_info;
     this.path = obj.path;
     this.original_path = obj.path;
@@ -342,11 +367,11 @@ export default {
     this.ingredients = obj.ingredients.map((val)=>{
       if(val[1].charAt(val[1].length-1)=="g"){
         this.ing_counter+=1;
-        return [val[0],val[1].substring(0,val[1].length-1),"g",this.ing_counter]
+        return [val[0],val[1].substring(0,val[1].length-1),"g",this.ing_counter,val[2]]
       }
       else{
         this.ing_counter+=1;
-        return [val[0],val[1].substring(0,val[1].length-3),"ind",this.ing_counter]
+        return [val[0],val[1].substring(0,val[1].length-3),"ind",this.ing_counter,val[2]]
       }
       });
     if(obj.copy){
@@ -370,7 +395,6 @@ export default {
 .ingredient {
   width: 400px;
   text-align: center;
-  margin-left: 100px;
 }
 .ingredient-container {
   display: flex;
@@ -393,8 +417,8 @@ export default {
 
 #ingredients {
   margin-top: 70px;
-  margin-right: 15%;
-  margin-left: 15%;
+  margin-right: 10%;
+  margin-left: 10%;
 }
 
 .hover-effect:hover {
@@ -411,9 +435,11 @@ export default {
   text-align: center;
   margin-left: auto;
   margin-right: auto;
+  display: flex;
+  justify-content: center;
 }
 
-#instructions {
+.instructions {
   text-align: left;
   display: inline-block;
   font-size:14px;
