@@ -20,7 +20,7 @@ protocol.registerSchemesAsPrivileged([
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 1060,
+    width: 1360,
     height: 820,
     tabbingIdentifier: "wooow",
     webPreferences: {
@@ -62,7 +62,7 @@ app.on("new-window-for-tab", () => {
 
 function addTab() {
   let win = new BrowserWindow({
-    width: 800,
+    width: 1000,
     height: 600,
     webPreferences: {
       nodeIntegration: true,
@@ -149,7 +149,7 @@ app.on("open-file", (event, path) => {
 
 function addTaba(path,windo) { // same as addTab, slightly modified to accept a path and stay on the current wi
   let wind = new BrowserWindow({
-    width: 800,
+    width: 1000,
     height: 600,
     webPreferences: {
       nodeIntegration: true,

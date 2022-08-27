@@ -15,22 +15,28 @@
         v-on:exit="goBackToRecipe"
       />
     </div>
-    <div v-else-if="!is_path && create_new">
+    <!-- <div v-else-if="!is_path && create_new">
       <create-recipe v-on:recipe-created="recipeCreated" v-on:exit="refresh" />
-    </div>
+    </div> -->
     <div v-else>
       <div class="flex-row">
         <div>
+          <h2>Recipe Preview</h2>
+          <br>
           <!-- <label for="files" class="btn"> <button class="create-recipe"> Open a recipe file </button> </label> -->
-          <button class="create-recipe"> <label for="files" class="btn"> Open a recipe file </label> </button>
-          <input id="files" type="file" @click="setNull" @change="updateFile" style="visibility:hidden;" /> 
+          <!-- <button class="create-recipe"> <label for="files" class="btn"> Open a recipe file </label> </button>
+          <input id="files" type="file" @click="setNull" @change="updateFile" style="visibility:hidden;" />  -->
         </div>
-        <div>
+        <!-- <div>
           <button @click="createRecipe" class="create-recipe">Create new recipe</button>
-        </div>
+        </div> -->
       </div>
       <br />
-      <RecipeSearch v-on:openRecipe="openTheRecipe" />
+
+      <div id="flex-con">
+        <RecipeSearch v-on:openRecipe="openTheRecipe" v-on:previewSelect="previewRecipe"/>
+        <div id="recipe-preview" v-if="showPreview"> <RecipePreviewer :path="recipePreview" /> </div>
+      </div>
     </div>
   </div>
 </template>
@@ -38,17 +44,21 @@
 <script>
 import Recipe from "./components/Recipe.vue";
 import RecipeSearch from "./components/RecipeSearch.vue";
-import CreateRecipe from "./components/CreateRecipe";
+// import CreateRecipe from "./components/CreateRecipe";
 import EditRecipe from "./components/EditRecipe";
+import RecipePreviewer from "./components/RecipePreviewer.vue";
+// import RecipePreviewer from "./components/RecipePreviewer.vue";
 
 export default {
   name: "App",
   components: {
     Recipe,
     RecipeSearch,
-    CreateRecipe,
+    // CreateRecipe,
     EditRecipe,
-  },
+    RecipePreviewer,
+    // RecipePreviewer
+},
   data: function() {
     return {
       is_path: false,
@@ -56,6 +66,8 @@ export default {
       create_new: false,
       edit_recipe: false,
       obj: {},
+      showPreview: false,
+      recipePreview: "",
     };
   },
   beforeMount() {
@@ -75,6 +87,8 @@ export default {
       if(e.keyCode == 13) document.getElementById("")
     },
     openTheRecipe: function(e) {
+      // console.log(e)
+      // return;
       const cmd = e.event.metaKey;
       if (!cmd) {
         this.path = e.path;
@@ -86,6 +100,12 @@ export default {
         const obj = {win: electron.remote.getCurrentWindow(),path: e.path}
         electron.remote.app.emit('new-tab-with-recipe',obj)
       }
+    },
+    previewRecipe: function(e) {
+      console.log("casdf")
+      console.log(e.path)
+      this.showPreview = true
+      this.recipePreview = e.path
     },
     setNull: function(event) {
       event.target.value = null;
@@ -160,8 +180,10 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 30px;
   min-width:450px;
+  height:1200px;
+  min-height:1200px;
 }
 .flex-row {
   display: flex;
@@ -177,5 +199,9 @@ export default {
 }
 .flex-row>div{
 width: 320px;
+}
+#flex-con{
+  display: flex;
+  /* justify-content: ; */
 }
 </style>

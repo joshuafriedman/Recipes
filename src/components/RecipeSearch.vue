@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="main">
     <!-- <input type="text" name="" id="search" v-model="inp" autofocus /> -->
     <div id="search-input">
       <div class="form__group field">
@@ -15,13 +15,16 @@
         <label for="name" class="form__label">Recipe name</label>
       </div>
     </div>
-    <div v-for="recipe in recipes" :key="recipe.key">
-      <div
-        class="recipee"
-        @click="$emit('openRecipe', { path: recipe.path, event: $event })"
-        v-if="recipe.name.toLowerCase().indexOf(inp) != -1"
-      >
-        {{ recipe.name }}
+    <div id="suggestions">
+      <div v-for="recipe in recipes" :key="recipe.key">
+        <div
+          class="recipee"
+          @click="$emit('openRecipe', { path: recipe.path, event: $event })"
+          
+          v-if="recipe.name.toLowerCase().indexOf(inp) != -1"
+        >
+          <div @mouseover="$emit('previewSelect',{ path: recipe.path })" class="recipe-name">{{ recipe.name }}</div>
+        </div>
       </div>
     </div>
     <div v-if="no_matches" id="no-recipe-match">No recipes matched</div>
@@ -82,18 +85,26 @@ export default {
 };
 </script>
 <style scoped>
+#main{
+  min-width:600px;
+}
 #no-recipe-match {
   opacity: 0.7;
+  text-align: left;
 }
-.recipee:hover {
+.recipe-name:hover {
   cursor: pointer;
   text-decoration: underline;
 }
 .recipee {
-  width: 300px;
-  margin-left: auto;
+  /* max-width: 400px; */
+  margin-left: 0px;
   margin-right: auto;
   padding-top: 1px;
+  text-align: left;
+}
+.recipe-name{
+display: inline-block;
 }
 #search-input {
   margin-bottom: 40px;
@@ -169,5 +180,14 @@ body {
   min-height: 100vh;
   font-size: 1.5rem;
   background-color: #222;
+}
+.form__group{
+  margin-left: 0px;
+}
+#suggestions{
+  overflow-y: scroll;
+  max-height: 600px;
+  border-bottom: #9b9b9b 1px solid;
+  margin-right: 50px;
 }
 </style>
